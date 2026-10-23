@@ -1,4 +1,4 @@
-name: Import sealed Task Supervisor preview2 source
+name: Import sealed DSH、CODEX CONTRLO WORLD preview3 source
 
 on:
   workflow_dispatch:
@@ -16,7 +16,7 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 10
     steps:
-      - name: Check out this repository only
+      - name: Check out this canonical repository only
         uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5, Node 24
         with:
           repository: rtmhjx/cortico-world-task-supervisor
@@ -25,13 +25,9 @@ jobs:
           submodules: false
           lfs: false
           persist-credentials: true
-
-      - name: Validate, import and commit the sealed source without executing it
+      - name: Import the fixed sealed source without executing it
         shell: bash
         env:
-          # Fixed sealed preview2 source archive, exactly 1,282,301 bytes; no inputs or URLs.
-          SOURCE_ZIP: cortico-world-task-supervisor-0.1.0-preview.2-source.zip
-          SOURCE_SHA256: 'a3da12dc299fc222ce8b76774928a6bfc58867af2e2d50944182c0e1fe74585a'
           GIT_CONFIG_NOSYSTEM: '1'
           GIT_CONFIG_GLOBAL: /dev/null
           GIT_ATTR_NOSYSTEM: '1'
@@ -46,13 +42,13 @@ jobs:
           import unicodedata
           import zipfile
           from pathlib import Path, PurePosixPath
-
+          
           REPOSITORY = 'rtmhjx/cortico-world-task-supervisor'
-          MAX_FILES = 150
+          MAX_FILES = 0
           MAX_ARCHIVE_BYTES = 64 * 1024 * 1024
           MAX_EXPANDED_BYTES = 64 * 1024 * 1024
           MAX_FILE_BYTES = 8 * 1024 * 1024
-          ARCHIVE_ROOT = 'cortico-world-task-supervisor-0.1.0-preview.2/'
+          ARCHIVE_ROOT = 'cortico-world-task-supervisor-0.1.0-preview.3/'
           TREES = {'src', 'vendor', 'tools', 'tests', 'lib'}
           ROOT_FILES = {
               'package.json', 'package-lock.json', 'pnpm-lock.yaml',
@@ -68,10 +64,10 @@ jobs:
               'tools/build.mjs', 'tsconfig.vendor.json',
               'console.js', 'console.d.ts', 'styles.css', 'describe.json',
           }
-
+          
           def fail(message):
               raise RuntimeError(message)
-
+          
           def verify_destination(root, parts):
               target = root
               for index, part in enumerate(parts):
@@ -87,7 +83,7 @@ jobs:
               if not target.resolve().is_relative_to(root):
                   fail('An import destination escapes the checkout.')
               return target
-
+          
           def import_archive(archive, expected_sha256, root):
               if not re.fullmatch(r'[0-9a-f]{64}', expected_sha256) or expected_sha256 == '0' * 64:
                   fail('Set the final literal source ZIP SHA256 before dispatching.')
@@ -99,7 +95,7 @@ jobs:
                       digest.update(block)
               if digest.hexdigest() != expected_sha256:
                   fail('The source ZIP does not match the sealed SHA256.')
-
+          
               with zipfile.ZipFile(archive) as package:
                   entries = package.infolist()
                   if len(entries) > 1024:
@@ -163,7 +159,7 @@ jobs:
                       if any('/'.join(parts[:i]) in names for i in range(1, len(parts))):
                           fail('A source file is also used as a directory.')
                       verify_destination(root, parts)
-
+          
                   # All paths are validated before writing. No ZIP extractall(),
                   # package manager, build, test, source import or source script runs.
                   for raw, parts, entry in files:
@@ -176,46 +172,135 @@ jobs:
                           output.write(content)
                       target.chmod(0o644)
               return sorted(names)
-
+          
+          
+          import json
+          import shutil
+          
+          SEALED_SHA256 = '633e2390876b947a9cb0820d63b2014129ae2d2fe14c19668400fda6c93b44c9'
+          SEALED_FILES = 150
+          SEALED_BYTES = 1283360
+          MAX_FILES = SEALED_FILES
+          
+          SOURCE_FILENAME = 'cortico-world-task-supervisor-0.1.0-preview.3-source.zip'
+          FORK_URL = 'https://github.com/rtmhjx/cortico-world-task-supervisor.git'
+          TARGET_REF = 'refs/heads/main'
+          PROJECT_NAME_ZH = 'dsh，codex等工作agent的实时汇报与控制桥'
+          PROJECT_NAME_EN = 'DSH、CODEX CONTRLO WORLD'
+          
+          def validate_seal():
+              if (not re.fullmatch('[0-9a-f]{64}', SEALED_SHA256) or SEALED_SHA256 == '0' * 64 or
+                  not isinstance(SEALED_FILES, int) or not 150 <= SEALED_FILES <= 250 or MAX_FILES != SEALED_FILES or
+                  not isinstance(SEALED_BYTES, int) or not 0 < SEALED_BYTES <= MAX_ARCHIVE_BYTES):
+                  fail('The preview.3 seal is incomplete; dispatch is forbidden.')
+          
           def git(*args, capture=False):
-              return subprocess.run(
-                  ['git', '-c', 'core.hooksPath=/dev/null', '-c', 'core.autocrlf=false',
-                   '-c', 'commit.gpgSign=false', *args],
-                  check=True, stdout=subprocess.PIPE if capture else None,
-              ).stdout
-
+              return subprocess.run(['git', '-c', 'core.hooksPath=' + os.devnull, '-c', 'core.autocrlf=false', '-c', 'commit.gpgSign=false', *args],
+                                    check=True, stdout=subprocess.PIPE if capture else None).stdout
+          
+          def tracked_tree(ref):
+              result = {}
+              for record in git('ls-tree', '-r', '-z', '--full-tree', ref, capture=True).split(b'\0'):
+                  if record:
+                      metadata, path = record.split(b'\t', 1)
+                      result[path.decode('utf-8')] = tuple(metadata.decode('ascii').split())
+              return result
+          
+          def is_source_path(path):
+              parts = path.split('/')
+              return parts[0] in TREES or (len(parts) == 1 and path in ROOT_FILES)
+          
+          def remote_is_unchanged(expected):
+              value = git('ls-remote', '--heads', 'origin', TARGET_REF, capture=True).decode().strip()
+              if value.split() != [expected, TARGET_REF]:
+                  fail('Canonical main changed; refusing this import.')
+          
+          def blob_sha(content):
+              return hashlib.sha1(b'blob ' + str(len(content)).encode('ascii') + b'\0' + content).hexdigest()
+          
+          def push_guard_source(previous, current):
+              expected = repr((FORK_URL, TARGET_REF, previous, current))
+              return '#!/usr/bin/env python3\nimport sys\nexpected = ' + expected + r'''
+          updates = [line.split() for line in sys.stdin if line.strip()]
+          ok = (len(sys.argv) == 3 and sys.argv[1:] == ['origin', expected[0]] and
+                len(updates) == 1 and len(updates[0]) == 4 and updates[0][1] == expected[3] and
+                updates[0][2] == expected[1] and updates[0][3] == expected[2])
+          if not ok:
+              print('The advertised canonical main changed; import push refused.', file=sys.stderr)
+              sys.exit(1)
+          '''
+          
           def main():
-              if (os.environ.get('GITHUB_REPOSITORY') != REPOSITORY or
-                  os.environ.get('GITHUB_REPOSITORY_OWNER') != 'rtmhjx' or
-                  os.environ.get('GITHUB_REF') != 'refs/heads/main' or
-                  os.environ.get('GITHUB_EVENT_NAME') != 'workflow_dispatch'):
-                  fail('This importer is restricted to the fixed repository main dispatch.')
+              validate_seal()
+              if (os.environ.get('GITHUB_REPOSITORY') != REPOSITORY or os.environ.get('GITHUB_REPOSITORY_OWNER') != 'rtmhjx' or
+                  os.environ.get('GITHUB_REF') != TARGET_REF or os.environ.get('GITHUB_EVENT_NAME') != 'workflow_dispatch'):
+                  fail('Only the fixed canonical repository main manual dispatch is permitted.')
               root = Path(os.environ['GITHUB_WORKSPACE']).resolve()
               if Path.cwd().resolve() != root:
-                  fail('The importer is not running in the fixed checkout.')
+                  fail('The importer is not inside its fixed checkout.')
+              before = git('rev-parse', 'HEAD', capture=True).decode().strip()
+              if not re.fullmatch('[0-9a-f]{40}', before) or before != os.environ.get('GITHUB_SHA') or git('status', '--porcelain', capture=True):
+                  fail('The checkout must be clean at this manual dispatch commit.')
               remote = git('remote', 'get-url', 'origin', capture=True).decode().strip()
-              if remote not in {'https://github.com/' + REPOSITORY, 'https://github.com/' + REPOSITORY + '.git'}:
-                  fail('The checkout remote is not the fixed repository.')
-              source = os.environ['SOURCE_ZIP']
-              if source != 'cortico-world-task-supervisor-0.1.0-preview.2-source.zip':
-                  fail('The source archive filename is fixed in this workflow.')
-              names = import_archive(root / source, os.environ['SOURCE_SHA256'], root)
-              paths = Path(os.environ['RUNNER_TEMP']) / 'task-supervisor-import-paths.nul'
+              if remote not in {FORK_URL, FORK_URL[:-4]}:
+                  fail('Origin is not the fixed canonical repository.')
+              git('remote', 'set-url', 'origin', FORK_URL)
+              git('remote', 'set-url', '--push', 'origin', FORK_URL)
+              remote_is_unchanged(before)
+              original_tree = tracked_tree('HEAD')
+              archive = root / SOURCE_FILENAME
+              if archive.is_symlink() or not archive.is_file() or archive.stat().st_size != SEALED_BYTES:
+                  fail('The fixed preview.3 source archive has an invalid type or sealed byte length.')
+              temporary = Path(os.environ['RUNNER_TEMP']).resolve()
+              staging = temporary / 'preview3-reviewed-source'
+              staging.mkdir(exist_ok=False)
+              names = import_archive(archive, SEALED_SHA256, staging)
+              manifest = json.loads((staging / 'package.json').read_text(encoding='utf-8'))
+              if manifest.get('name') != 'cortico-world-task-supervisor' or manifest.get('version') != '0.1.0-preview.3':
+                  fail('The sealed archive is not the fixed technical package and preview version.')
+              metadata = manifest.get('cortico', {})
+              locales = metadata.get('locales', {})
+              if (metadata.get('displayName') != PROJECT_NAME_ZH + ' / ' + PROJECT_NAME_EN or
+                  locales.get('zh', {}).get('displayName') != PROJECT_NAME_ZH or
+                  locales.get('en', {}).get('displayName') != PROJECT_NAME_EN):
+                  fail('The sealed archive does not carry the exact approved Chinese and English project names.')
+              if not {path for path in original_tree if is_source_path(path)}.issubset(set(names)):
+                  fail('The new archive would omit an existing canonical source file.')
+              destinations = [(name, verify_destination(root, name.split('/'))) for name in names]
+              for name, destination in destinations:
+                  destination.parent.mkdir(parents=True, exist_ok=True)
+                  shutil.copyfile(staging / name, destination)
+                  destination.chmod(0o644)
+              paths = temporary / 'preview3-reviewed-source-paths.nul'
               paths.write_bytes(b''.join(name.encode('utf-8') + b'\0' for name in names))
               git('--literal-pathspecs', 'add', '--force', '--pathspec-from-file=' + str(paths), '--pathspec-file-nul')
-              staged = {name.decode('utf-8') for name in git('diff', '--cached', '--name-only', '-z', capture=True).split(b'\0') if name}
+              staged = {item.decode('utf-8') for item in git('diff', '--cached', '--name-only', '-z', capture=True).split(b'\0') if item}
               if not staged.issubset(set(names)):
-                  fail('Git staged a path outside the validated ZIP inventory.')
+                  fail('A staged file is outside the exact sealed source inventory.')
               if not staged:
-                  print('The sealed source is already imported; nothing was committed or pushed.')
+                  print('The sealed preview.3 source is already imported; no commit or push.')
                   return
-              git('-c', 'user.name=github-actions[bot]',
-                  '-c', 'user.email=41898282+github-actions[bot]@users.noreply.github.com',
-                  'commit', '--no-verify', '--no-gpg-sign', '-m',
-                  'Import sealed Task Supervisor 0.1.0-preview.2 source')
-              git('push', '--no-verify', 'origin', 'HEAD:refs/heads/main')
-              print('Imported', len(names), 'validated source files into', REPOSITORY, 'main.')
-
+              git('-c', 'user.name=github-actions[bot]', '-c', 'user.email=41898282+github-actions[bot]@users.noreply.github.com',
+                  'commit', '--no-verify', '--no-gpg-sign', '-m', 'chore: import sealed preview.3 source')
+              if git('rev-parse', 'HEAD^', capture=True).decode().strip() != before:
+                  fail('The import commit does not directly descend from the checked dispatch commit.')
+              final_tree = tracked_tree('HEAD')
+              if set(final_tree) != set(original_tree) | set(names):
+                  fail('The import unexpectedly added or removed another canonical repository path.')
+              if any(final_tree.get(path) != value for path, value in original_tree.items() if path not in names):
+                  fail('An existing non-source artifact or workflow changed.')
+              if any(final_tree.get(name) != ('100644', 'blob', blob_sha((staging / name).read_bytes())) for name in names):
+                  fail('A committed source object differs from the sealed archive bytes or expected mode.')
+              remote_is_unchanged(before)
+              after = git('rev-parse', 'HEAD', capture=True).decode().strip()
+              hooks = temporary / 'preview3-trusted-push-guard'
+              hooks.mkdir(exist_ok=False)
+              hook = hooks / 'pre-push'
+              hook.write_text(push_guard_source(before, after), encoding='utf-8', newline='\n')
+              hook.chmod(0o755)
+              git('-c', 'core.hooksPath=' + str(hooks), 'push', 'origin', 'HEAD:' + TARGET_REF)
+              print('Imported', len(names), 'sealed preview.3 source files into canonical main.')
+          
           if __name__ == '__main__':
               main()
           PY
