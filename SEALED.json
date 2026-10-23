@@ -1,13 +1,13 @@
 {
   "schema": 1,
-  "sealedAtUtc": "2026-10-23T22:29:30.921244+00:00",
+  "sealedAtUtc": "2026-10-23T23:29:48.865479+00:00",
   "revision": 1,
   "package": {
     "name": "cortico-world-task-supervisor",
-    "version": "0.1.0-preview.2",
+    "version": "0.1.0-preview.3",
     "worldApi": 6
   },
-  "sourceTreeSha256": "5998154f11039f5cade8f485a82ea4c48c0d91c2f55ba7ec9c56d6d6401a1fb8",
+  "sourceTreeSha256": "5e476b2bad242cdc0ea426aa596b599f744c29d729b3a4300668ffc9f94cecd3",
   "archiveChecks": {
     "sourceZipCrc": true,
     "sourceZipRepeatedBuildMatches": true,

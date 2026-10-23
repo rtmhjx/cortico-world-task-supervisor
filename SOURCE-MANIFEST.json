@@ -39,7 +39,7 @@
   "encoding": "UTF-8 without BOM",
   "lineEndings": "LF",
   "sourceFileCount": 150,
-  "sourceTreeSha256": "5998154f11039f5cade8f485a82ea4c48c0d91c2f55ba7ec9c56d6d6401a1fb8",
+  "sourceTreeSha256": "5e476b2bad242cdc0ea426aa596b599f744c29d729b3a4300668ffc9f94cecd3",
   "files": [
     {
       "path": ".gitattributes",
@@ -58,8 +58,8 @@
     },
     {
       "path": "CHANGELOG.md",
-      "bytes": 1582,
-      "sha256": "6dae34c967f29cd13c7086350e2effd9e213ed0697a4411700d64ffd38fa2f0f"
+      "bytes": 2800,
+      "sha256": "7ddda33dc3a97726d41c4a6d76b2391d73e92e4fcd5a2bc331f06fd2f051abf9"
     },
     {
       "path": "LICENSE",
@@ -73,8 +73,8 @@
     },
     {
       "path": "README.md",
-      "bytes": 13112,
-      "sha256": "75026325d38f611c3a8d5fa36cba4265a938b204ba8018663b46f431aa76681f"
+      "bytes": 10675,
+      "sha256": "ea991f672bd82c82a5da4b053430f16b51fa957631ba24cfa8d76210af329506"
     },
     {
       "path": "SECURITY.md",
@@ -98,18 +98,18 @@
     },
     {
       "path": "console.js",
-      "bytes": 268038,
-      "sha256": "850cbeabfbb16643f628438d4abb72ac246a3425e919457bec8284948fb038ef"
+      "bytes": 268172,
+      "sha256": "bbac7adb1c703801d819effef4ebafc3ea693b21f265ee26a6ac934530eeaeb2"
     },
     {
       "path": "describe.json",
-      "bytes": 32332,
-      "sha256": "33f9b8382ab91a33a5d8c98ecd3c073308db186cfc03a768adcfb94c4eb677d8"
+      "bytes": 32902,
+      "sha256": "30c5254d4986db927d68319816089d64cbf561c9368ca79dad6c1f874f2a20cc"
     },
     {
       "path": "lib/ENV_PROMPT.md",
-      "bytes": 5410,
-      "sha256": "763bfbfe63368fdda736e7442e8bc04bb9fc03b127f046704db1473b4f0eccb3"
+      "bytes": 5420,
+      "sha256": "e068a9fc8eecf633232f77f20aa0c516b07a0ecd8551a9a8af10e97c71f02a33"
     },
     {
       "path": "lib/dsh-memory-raw-worker.mjs",
@@ -123,43 +123,43 @@
     },
     {
       "path": "lib/index.js",
-      "bytes": 744110,
-      "sha256": "16ac6160dd9f0a86fee99f2b4ff2334fe01723c01e86eac46d33a189df2660f4"
+      "bytes": 744455,
+      "sha256": "d347ed9e5465fbca5a8185ee8ed8ecc1850b48ac046372b4f6992b9b15c2836a"
     },
     {
       "path": "lib/index.js.map",
-      "bytes": 1053173,
-      "sha256": "7d84d17e1ccffb3b5a568ddd1307e17e4d3a7f4195d0ac897b0ca34bc7885ed6"
+      "bytes": 1053455,
+      "sha256": "99ff01b56ce350b034336ab206da8e97fe7fd0944354bcdd60c1a4270d2ecd0c"
     },
     {
       "path": "lib/install-gateway.mjs",
-      "bytes": 276592,
-      "sha256": "011278c41788da7d0fa0769b02578206efb3e2c1b9dc70b128196e89728f56eb"
+      "bytes": 276618,
+      "sha256": "82b18948acceec8b60444e4d1499ba4a26a27fa27ffeec938a78b90a50710b0f"
     },
     {
       "path": "lib/install-gateway.mjs.map",
-      "bytes": 476588,
-      "sha256": "738d020577e2540248cfb9d359a49e5f7366be5bd6f387cd44e7bb361c5d0f78"
+      "bytes": 476608,
+      "sha256": "d95b882ddfebeedf5013d7bee155b22baa23430568c69d126386a167243af83f"
     },
     {
       "path": "package-lock.json",
       "bytes": 130948,
-      "sha256": "dfa93488bf5505f8ae5357a735d764c6c010f6d55205b147789d609f62425a4e"
+      "sha256": "2657f0cdcb4729fb60e63e98ba36f85b1625cbe202ac7ff50df4f21a0827a84b"
     },
     {
       "path": "package.json",
-      "bytes": 2380,
-      "sha256": "402651cbedf5386d6d343d63b89b49e1d12d64317521b57d4d0a9e03f78e6f88"
+      "bytes": 2576,
+      "sha256": "9a5d07e104fda6782d495b2b414aeb2ab26444569a216f690cdc8d050180cee8"
     },
     {
       "path": "src/ENV_PROMPT.md",
-      "bytes": 5410,
-      "sha256": "763bfbfe63368fdda736e7442e8bc04bb9fc03b127f046704db1473b4f0eccb3"
+      "bytes": 5420,
+      "sha256": "e068a9fc8eecf633232f77f20aa0c516b07a0ecd8551a9a8af10e97c71f02a33"
     },
     {
       "path": "src/backend-contract.ts",
       "bytes": 1631,
-      "sha256": "fff5018c109cea985fe53702c2254006f67bc5274fbab9e98b166b30cb9eb758"
+      "sha256": "2d1445a6b87ccf878abecf451c572a16f7f447f16b52ce64ff134e84dbe4dbf0"
     },
     {
       "path": "src/catalog.ts",
@@ -173,13 +173,13 @@
     },
     {
       "path": "src/config.ts",
-      "bytes": 9301,
-      "sha256": "7a2edf151194d787aab78bb32023641bee73373d70741809f07d0961113f115f"
+      "bytes": 9340,
+      "sha256": "bea366369495eb6d72c426e69b7fdf37a0d3778115c9995948e1b7b134fd06bf"
     },
     {
       "path": "src/definition.ts",
-      "bytes": 1766,
-      "sha256": "80ac1837c06a707309b54fc0088a7565df596677e8d4a0faeb6c16e5dd6f17ca"
+      "bytes": 1831,
+      "sha256": "6b427ef6ee6df175bdc974a45fa9d43663770ec99b43fcc2f9d5234b639b8664"
     },
     {
       "path": "src/index.ts",
@@ -188,8 +188,8 @@
     },
     {
       "path": "src/installer.ts",
-      "bytes": 10724,
-      "sha256": "891b42c73118175409a8262932e1bb9ce95709319d3a5932828c6336747416d1"
+      "bytes": 10744,
+      "sha256": "5da6ab83d486f69defbd7b293bf121b0182e2afdeeac99c6f580662c9aa98919"
     },
     {
       "path": "src/scope-registry.ts",
@@ -203,13 +203,13 @@
     },
     {
       "path": "src/world.ts",
-      "bytes": 31731,
-      "sha256": "842a448f05aad7b9d20feb3831377263dd2ad95136376a52b85433ca352c5f1e"
+      "bytes": 31771,
+      "sha256": "2ebfeaec9d4fb1dc9889d18485e1de3861f9ea407706bb0a61d1d9e0ca98a57f"
     },
     {
       "path": "styles.css",
-      "bytes": 9439,
-      "sha256": "3f4b42441d1da586f83d2bd0e8ffb198b02fd08838dc7517873d7de00328a9a0"
+      "bytes": 9566,
+      "sha256": "1bcaef10bb7263e21022849cbb093c32388819c3c7dbc3d4511d72fbc7d5ecbb"
     },
     {
       "path": "tests/installer.test.ts",
@@ -233,13 +233,13 @@
     },
     {
       "path": "tests/ui.test.mjs",
-      "bytes": 20730,
-      "sha256": "85a7ee6639f1fc35eebb7b7cc90090dc06c5691a30629904460ab62818f2c685"
+      "bytes": 22148,
+      "sha256": "1801d610f44ca807a3c73664c4add07f6d7fc1b62e2cf7c2a82214351a94a226"
     },
     {
       "path": "tests/webui-language.test.ts",
-      "bytes": 2522,
-      "sha256": "1fe5a95dd53c7cec3ac4df09ecd174ac1f6a6f2fe7e896e1b9223355676beccb"
+      "bytes": 3107,
+      "sha256": "8038e560b199f71c10aeacadb6cbd4ccb88cd38eac2082f47652ac536607d7b7"
     },
     {
       "path": "tools/build-vendor.mjs",

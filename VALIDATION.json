@@ -2,8 +2,11 @@
   "schema": 1,
   "package": {
     "name": "cortico-world-task-supervisor",
-    "version": "0.1.0-preview.2",
-    "worldApi": 6
+    "version": "0.1.0-preview.3",
+    "worldApi": 6,
+    "displayName": "dsh，codex等工作agent的实时汇报与控制桥 / DSH、CODEX CONTRLO WORLD",
+    "formalChineseName": "dsh，codex等工作agent的实时汇报与控制桥",
+    "formalEnglishName": "DSH、CODEX CONTRLO WORLD"
   },
   "node": "v24.19.0",
   "toolchain": {
@@ -18,7 +21,7 @@
     "@types/node": "24.19.2",
     "@types/ws": "8.18.2"
   },
-  "dependencyLockSha256": "dfa93488bf5505f8ae5357a735d764c6c010f6d55205b147789d609f62425a4e",
+  "dependencyLockSha256": "2657f0cdcb4729fb60e63e98ba36f85b1625cbe202ac7ff50df4f21a0827a84b",
   "build": {
     "completed": true,
     "byteExactRebuildVerified": true,
@@ -34,22 +37,54 @@
     "finalRawLogsRetainedInWorkbench": true
   },
   "tests": {
-    "fullSuite": {
+    "inheritedPreview2Baseline": {
       "tests": 298,
       "pass": 297,
       "fail": 0,
       "cancelled": 0,
       "skipped": 1,
       "todo": 0,
-      "fullyRerunForPreview2": true,
-      "skippedReason": "Windows file symlink permission unavailable; all other fixture cases passed."
+      "version": "0.1.0-preview.2",
+      "fullyRerunForPreview3": false,
+      "validationSha256": "ccaeeefd9dd3a1540cff7f9c5bd360ac13295eef6b82ca15c96d898c8a046f07",
+      "includedFrontendUiCases": 22,
+      "includedRealWorldLanguageMetadataCases": 1,
+      "nativeDshPreparedSessionCases": 7,
+      "nativeDshUsesSyntheticInMemoryPersistence": true,
+      "skippedReason": "Windows file symlink permission unavailable."
     },
-    "includedFrontendUiCases": 22,
-    "includedRealWorldStringLanguageMetadataCases": 1,
-    "nativeDshPreparedSessionCases": 7,
-    "nativeDshUsesSyntheticInMemoryPersistence": true,
+    "preview3Targeted": {
+      "tests": 27,
+      "pass": 27,
+      "fail": 0,
+      "cancelled": 0,
+      "skipped": 0,
+      "todo": 0,
+      "freshlyRerun": true,
+      "frontendUiCases": 23,
+      "realWorldStringLanguageMetadataCases": 1,
+      "standaloneGatewayInstallerCases": 3,
+      "fullCoreSuiteRerunClaimed": false
+    },
     "profilesAndHome": "isolated synthetic",
     "realCredentialsUsed": false
+  },
+  "browserHeadingChecks": {
+    "browser": "Microsoft Edge 155",
+    "syntheticHostContext": true,
+    "actualBrowserRendering": true,
+    "cases": 4,
+    "passed": true,
+    "languages": [
+      "zh",
+      "en"
+    ],
+    "containerWidthsPx": [
+      360,
+      1037
+    ],
+    "headingOverflowObserved": false,
+    "realDesktopHostStarted": false
   },
   "sdkCompatibility": [
     {
@@ -122,11 +157,11 @@
   "extensionCheckerEnvironment": {
     "tagVocabulary": "skipped-intentionally-offline",
     "liveTagValidationClaimedByThisSeal": false,
-    "tagNote": "SDK check did not fetch the public tag vocabulary. A separate live market check is outside this sealed fixture evidence.",
+    "tagNote": "SDK checks did not fetch the public tag vocabulary. Live market publication is a separate stage.",
     "publishedPackageAndTestToolchain": "fresh npm lock installation without install scripts",
     "upstreamBuiltinMinecraftCheckerExtras": {
       "readOnlyExistingPublicNpmModules": true,
-      "reason": "The source SDK checker eagerly imports its unrelated built-in Worlds; Minecraft is not a dependency of this World package.",
+      "reason": "The source SDK checker eagerly imports unrelated built-in Worlds; Minecraft is not a dependency of this World package.",
       "packages": {
         "vec3": "0.2.0",
         "mineflayer": "4.37.1",
@@ -135,34 +170,47 @@
       "importConditionsPreserved": true,
       "stubsUsed": false,
       "fullResolutionLogRetainedInWorkbench": true
-    },
-    "initialHarnessFailure": "The first optional SDK-extra resolver selected vec3 require entry for an import. The corrected harness preserves package export conditions; both final upstream checks exited zero."
+    }
   },
   "revision": {
-    "preview": 2,
-    "addedSourceFiles": [
-      "console.d.ts",
-      "tests/webui-language.test.ts"
-    ],
+    "preview": 3,
+    "addedSourceFiles": [],
     "changedSourceFiles": [
       "CHANGELOG.md",
       "README.md",
       "console.js",
       "describe.json",
+      "lib/ENV_PROMPT.md",
       "lib/index.js",
       "lib/index.js.map",
+      "lib/install-gateway.mjs",
+      "lib/install-gateway.mjs.map",
       "package-lock.json",
       "package.json",
+      "src/ENV_PROMPT.md",
       "src/backend-contract.ts",
+      "src/config.ts",
+      "src/definition.ts",
+      "src/installer.ts",
       "src/world.ts",
-      "tests/ui.test.mjs"
+      "styles.css",
+      "tests/ui.test.mjs",
+      "tests/webui-language.test.ts"
     ],
     "removedSourceFiles": [],
-    "vendorSourceUnchangedSincePreview1": true,
-    "changes": "Eleven language frontend and human World metadata; identifiers, model-facing text and task-gate behavior remain stable."
+    "vendorSourceUnchangedSincePreview2": true,
+    "licenseAndProvenanceFilesUnchangedSincePreview2": true,
+    "changes": "Formal bilingual naming, Chinese-first README and long-title layout. Branding strings in model-facing and installer text also changed; task-gate and native-control logic did not."
   },
   "scope": {
-    "elevenLanguageCoverage": "Cortico/World control console and its human metadata; standalone DSH installer terminal prompts remain English.",
+    "distribution": "Independent World plugin for a compatible Cortico/Coo API 6 host",
+    "standaloneDesktopApplication": false,
+    "currentlyImplementedAgentAdapters": [
+      "DSH",
+      "Codex"
+    ],
+    "otherAgentAdaptersAlreadyImplemented": false,
+    "elevenLanguageCoverage": "World console and human metadata; standalone DSH installer terminal prompts remain English.",
     "fullElectronStartupClaimed": false,
     "realQqExecutionClaimed": false,
     "longRunningStabilityClaimed": false,
