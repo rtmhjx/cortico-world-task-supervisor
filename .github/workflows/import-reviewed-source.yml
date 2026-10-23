@@ -1,4 +1,4 @@
-name: Import sealed Task Supervisor source
+name: Import sealed Task Supervisor preview2 source
 
 on:
   workflow_dispatch:
@@ -29,9 +29,9 @@ jobs:
       - name: Validate, import and commit the sealed source without executing it
         shell: bash
         env:
-          # Fixed, sealed UI-revision-2 source archive; no dispatch inputs or URLs.
-          SOURCE_ZIP: cortico-world-task-supervisor-0.1.0-preview.1-source.zip
-          SOURCE_SHA256: 3bb54b6543a6fe23bb46790851a5dfd8894f2fb9b62481808ffe2bf141b91395
+          # Fixed sealed preview2 source archive, exactly 1,282,301 bytes; no inputs or URLs.
+          SOURCE_ZIP: cortico-world-task-supervisor-0.1.0-preview.2-source.zip
+          SOURCE_SHA256: 'a3da12dc299fc222ce8b76774928a6bfc58867af2e2d50944182c0e1fe74585a'
           GIT_CONFIG_NOSYSTEM: '1'
           GIT_CONFIG_GLOBAL: /dev/null
           GIT_ATTR_NOSYSTEM: '1'
@@ -48,11 +48,11 @@ jobs:
           from pathlib import Path, PurePosixPath
 
           REPOSITORY = 'rtmhjx/cortico-world-task-supervisor'
-          MAX_FILES = 148
+          MAX_FILES = 150
           MAX_ARCHIVE_BYTES = 64 * 1024 * 1024
           MAX_EXPANDED_BYTES = 64 * 1024 * 1024
           MAX_FILE_BYTES = 8 * 1024 * 1024
-          ARCHIVE_ROOT = 'cortico-world-task-supervisor-0.1.0-preview.1/'
+          ARCHIVE_ROOT = 'cortico-world-task-supervisor-0.1.0-preview.2/'
           TREES = {'src', 'vendor', 'tools', 'tests', 'lib'}
           ROOT_FILES = {
               'package.json', 'package-lock.json', 'pnpm-lock.yaml',
@@ -60,13 +60,13 @@ jobs:
               'CHANGELOG.md', 'SECURITY.md', 'BUILDING.md', 'SOURCES.md',
               'LICENSE', 'NOTICE', 'THIRD-PARTY-LICENSES.txt',
               '.gitignore', '.gitattributes', '.npmignore',
-              'console.js', 'styles.css', 'describe.json',
+              'console.js', 'console.d.ts', 'styles.css', 'describe.json',
           }
           REQUIRED = {
               'package.json', 'README.md', 'LICENSE', 'NOTICE',
               'src/index.ts', 'src/world.ts', 'lib/index.js',
               'tools/build.mjs', 'tsconfig.vendor.json',
-              'console.js', 'styles.css', 'describe.json',
+              'console.js', 'console.d.ts', 'styles.css', 'describe.json',
           }
 
           def fail(message):
@@ -197,7 +197,7 @@ jobs:
               if remote not in {'https://github.com/' + REPOSITORY, 'https://github.com/' + REPOSITORY + '.git'}:
                   fail('The checkout remote is not the fixed repository.')
               source = os.environ['SOURCE_ZIP']
-              if source != 'cortico-world-task-supervisor-0.1.0-preview.1-source.zip':
+              if source != 'cortico-world-task-supervisor-0.1.0-preview.2-source.zip':
                   fail('The source archive filename is fixed in this workflow.')
               names = import_archive(root / source, os.environ['SOURCE_SHA256'], root)
               paths = Path(os.environ['RUNNER_TEMP']) / 'task-supervisor-import-paths.nul'
@@ -212,7 +212,7 @@ jobs:
               git('-c', 'user.name=github-actions[bot]',
                   '-c', 'user.email=41898282+github-actions[bot]@users.noreply.github.com',
                   'commit', '--no-verify', '--no-gpg-sign', '-m',
-                  'Import sealed Task Supervisor 0.1.0-preview.1 source')
+                  'Import sealed Task Supervisor 0.1.0-preview.2 source')
               git('push', '--no-verify', 'origin', 'HEAD:refs/heads/main')
               print('Imported', len(names), 'validated source files into', REPOSITORY, 'main.')
 
