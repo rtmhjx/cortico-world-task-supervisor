@@ -1,0 +1,221 @@
+name: Import sealed Task Supervisor source
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: task-supervisor-sealed-source-import-main
+  cancel-in-progress: false
+
+jobs:
+  import:
+    if: github.repository == 'rtmhjx/cortico-world-task-supervisor' && github.repository_owner == 'rtmhjx' && github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Check out this repository only
+        uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5, Node 24
+        with:
+          repository: rtmhjx/cortico-world-task-supervisor
+          ref: main
+          fetch-depth: 1
+          submodules: false
+          lfs: false
+          persist-credentials: true
+
+      - name: Validate, import and commit the sealed source without executing it
+        shell: bash
+        env:
+          # Fixed, sealed UI-revision-2 source archive; no dispatch inputs or URLs.
+          SOURCE_ZIP: cortico-world-task-supervisor-0.1.0-preview.1-source.zip
+          SOURCE_SHA256: 3bb54b6543a6fe23bb46790851a5dfd8894f2fb9b62481808ffe2bf141b91395
+          GIT_CONFIG_NOSYSTEM: '1'
+          GIT_CONFIG_GLOBAL: /dev/null
+          GIT_ATTR_NOSYSTEM: '1'
+          GIT_LITERAL_PATHSPECS: '1'
+        run: |
+          python3 - <<'PY'
+          import hashlib
+          import os
+          import re
+          import stat
+          import subprocess
+          import unicodedata
+          import zipfile
+          from pathlib import Path, PurePosixPath
+
+          REPOSITORY = 'rtmhjx/cortico-world-task-supervisor'
+          MAX_FILES = 148
+          MAX_ARCHIVE_BYTES = 64 * 1024 * 1024
+          MAX_EXPANDED_BYTES = 64 * 1024 * 1024
+          MAX_FILE_BYTES = 8 * 1024 * 1024
+          ARCHIVE_ROOT = 'cortico-world-task-supervisor-0.1.0-preview.1/'
+          TREES = {'src', 'vendor', 'tools', 'tests', 'lib'}
+          ROOT_FILES = {
+              'package.json', 'package-lock.json', 'pnpm-lock.yaml',
+              'tsconfig.vendor.json', 'README.md', 'README.zh-CN.md',
+              'CHANGELOG.md', 'SECURITY.md', 'BUILDING.md', 'SOURCES.md',
+              'LICENSE', 'NOTICE', 'THIRD-PARTY-LICENSES.txt',
+              '.gitignore', '.gitattributes', '.npmignore',
+              'console.js', 'styles.css', 'describe.json',
+          }
+          REQUIRED = {
+              'package.json', 'README.md', 'LICENSE', 'NOTICE',
+              'src/index.ts', 'src/world.ts', 'lib/index.js',
+              'tools/build.mjs', 'tsconfig.vendor.json',
+              'console.js', 'styles.css', 'describe.json',
+          }
+
+          def fail(message):
+              raise RuntimeError(message)
+
+          def verify_destination(root, parts):
+              target = root
+              for index, part in enumerate(parts):
+                  target = target / part
+                  if target.is_symlink():
+                      fail('An import destination contains a symbolic link.')
+                  if target.exists():
+                      mode = target.stat().st_mode
+                      if index < len(parts) - 1 and not stat.S_ISDIR(mode):
+                          fail('An import parent is not a directory.')
+                      if index == len(parts) - 1 and not stat.S_ISREG(mode):
+                          fail('An import file destination is not a regular file.')
+              if not target.resolve().is_relative_to(root):
+                  fail('An import destination escapes the checkout.')
+              return target
+
+          def import_archive(archive, expected_sha256, root):
+              if not re.fullmatch(r'[0-9a-f]{64}', expected_sha256) or expected_sha256 == '0' * 64:
+                  fail('Set the final literal source ZIP SHA256 before dispatching.')
+              if archive.is_symlink() or not archive.is_file() or archive.stat().st_size > MAX_ARCHIVE_BYTES:
+                  fail('The fixed source ZIP is unavailable or exceeds its size limit.')
+              digest = hashlib.sha256()
+              with archive.open('rb') as stream:
+                  for block in iter(lambda: stream.read(1024 * 1024), b''):
+                      digest.update(block)
+              if digest.hexdigest() != expected_sha256:
+                  fail('The source ZIP does not match the sealed SHA256.')
+
+              with zipfile.ZipFile(archive) as package:
+                  entries = package.infolist()
+                  if len(entries) > 1024:
+                      fail('The source ZIP contains too many archive entries.')
+                  files = []
+                  names = set()
+                  spellings = {}
+                  all_entries = set()
+                  total = 0
+                  members = set()
+                  for entry in entries:
+                      if entry.orig_filename != entry.filename:
+                          fail('The source ZIP contains a truncated member name.')
+                      if entry.filename in members:
+                          fail('The source ZIP contains a duplicate member.')
+                      members.add(entry.filename)
+                      kind = stat.S_IFMT(entry.external_attr >> 16)
+                      allowed_kinds = {0, stat.S_IFDIR} if entry.is_dir() else {0, stat.S_IFREG}
+                      if kind not in allowed_kinds or entry.flag_bits & 1:
+                          fail('Links, special files and encrypted ZIP entries are forbidden.')
+                      if entry.compress_type not in {zipfile.ZIP_STORED, zipfile.ZIP_DEFLATED}:
+                          fail('The source ZIP uses an unsupported compression method.')
+                      if not entry.filename.startswith(ARCHIVE_ROOT):
+                          fail('The source ZIP does not use the fixed enclosing directory.')
+                      member = entry.filename[len(ARCHIVE_ROOT):]
+                      if not member and entry.is_dir():
+                          continue
+                      raw = member[:-1] if entry.is_dir() else member
+                      if not raw or chr(92) in raw or raw.startswith('/') or ':' in raw:
+                          fail('The source ZIP contains an invalid or absolute member path.')
+                      if unicodedata.normalize('NFC', raw) != raw or any(unicodedata.category(c) in {'Cc', 'Cf'} for c in raw):
+                          fail('The source ZIP contains a noncanonical member path.')
+                      parts = raw.split('/')
+                      if any(part in {'', '.', '..'} or part.casefold() == '.git' for part in parts):
+                          fail('The source ZIP contains a traversal or Git metadata path.')
+                      path = PurePosixPath(raw)
+                      if str(path) != raw or raw in all_entries:
+                          fail('The source ZIP contains a duplicate or noncanonical path.')
+                      all_entries.add(raw)
+                      for length in range(1, len(parts) + 1):
+                          spelling = '/'.join(parts[:length])
+                          previous = spellings.setdefault(spelling.casefold(), spelling)
+                          if previous != spelling:
+                              fail('The source ZIP contains paths that collide by case.')
+                      if parts[0] not in TREES and (entry.is_dir() or len(parts) != 1 or raw not in ROOT_FILES):
+                          fail('The source ZIP contains a path outside the fixed source allowlist.')
+                      if entry.is_dir():
+                          continue
+                      if not 0 <= entry.file_size <= MAX_FILE_BYTES:
+                          fail('A source file exceeds its expanded size limit.')
+                      total += entry.file_size
+                      if total > MAX_EXPANDED_BYTES:
+                          fail('The source ZIP exceeds its expanded size limit.')
+                      names.add(raw)
+                      files.append((raw, parts, entry))
+                  if len(files) != MAX_FILES or not REQUIRED.issubset(names):
+                      fail('The ZIP file count or required source set is invalid.')
+                  if any(not any(name.startswith(tree + '/') for name in names) for tree in TREES):
+                      fail('A required source tree is absent.')
+                  for raw, parts, _ in files:
+                      if any('/'.join(parts[:i]) in names for i in range(1, len(parts))):
+                          fail('A source file is also used as a directory.')
+                      verify_destination(root, parts)
+
+                  # All paths are validated before writing. No ZIP extractall(),
+                  # package manager, build, test, source import or source script runs.
+                  for raw, parts, entry in files:
+                      target = verify_destination(root, parts)
+                      target.parent.mkdir(parents=True, exist_ok=True)
+                      content = package.read(entry)
+                      if len(content) != entry.file_size:
+                          fail('A ZIP member has an unexpected expanded length.')
+                      with target.open('wb') as output:
+                          output.write(content)
+                      target.chmod(0o644)
+              return sorted(names)
+
+          def git(*args, capture=False):
+              return subprocess.run(
+                  ['git', '-c', 'core.hooksPath=/dev/null', '-c', 'core.autocrlf=false',
+                   '-c', 'commit.gpgSign=false', *args],
+                  check=True, stdout=subprocess.PIPE if capture else None,
+              ).stdout
+
+          def main():
+              if (os.environ.get('GITHUB_REPOSITORY') != REPOSITORY or
+                  os.environ.get('GITHUB_REPOSITORY_OWNER') != 'rtmhjx' or
+                  os.environ.get('GITHUB_REF') != 'refs/heads/main' or
+                  os.environ.get('GITHUB_EVENT_NAME') != 'workflow_dispatch'):
+                  fail('This importer is restricted to the fixed repository main dispatch.')
+              root = Path(os.environ['GITHUB_WORKSPACE']).resolve()
+              if Path.cwd().resolve() != root:
+                  fail('The importer is not running in the fixed checkout.')
+              remote = git('remote', 'get-url', 'origin', capture=True).decode().strip()
+              if remote not in {'https://github.com/' + REPOSITORY, 'https://github.com/' + REPOSITORY + '.git'}:
+                  fail('The checkout remote is not the fixed repository.')
+              source = os.environ['SOURCE_ZIP']
+              if source != 'cortico-world-task-supervisor-0.1.0-preview.1-source.zip':
+                  fail('The source archive filename is fixed in this workflow.')
+              names = import_archive(root / source, os.environ['SOURCE_SHA256'], root)
+              paths = Path(os.environ['RUNNER_TEMP']) / 'task-supervisor-import-paths.nul'
+              paths.write_bytes(b''.join(name.encode('utf-8') + b'\0' for name in names))
+              git('--literal-pathspecs', 'add', '--force', '--pathspec-from-file=' + str(paths), '--pathspec-file-nul')
+              staged = {name.decode('utf-8') for name in git('diff', '--cached', '--name-only', '-z', capture=True).split(b'\0') if name}
+              if not staged.issubset(set(names)):
+                  fail('Git staged a path outside the validated ZIP inventory.')
+              if not staged:
+                  print('The sealed source is already imported; nothing was committed or pushed.')
+                  return
+              git('-c', 'user.name=github-actions[bot]',
+                  '-c', 'user.email=41898282+github-actions[bot]@users.noreply.github.com',
+                  'commit', '--no-verify', '--no-gpg-sign', '-m',
+                  'Import sealed Task Supervisor 0.1.0-preview.1 source')
+              git('push', '--no-verify', 'origin', 'HEAD:refs/heads/main')
+              print('Imported', len(names), 'validated source files into', REPOSITORY, 'main.')
+
+          if __name__ == '__main__':
+              main()
+          PY
