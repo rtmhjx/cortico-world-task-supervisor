@@ -1,13 +1,13 @@
 import assert from 'node:assert/strict';
 import { createRequire } from 'node:module';
 import { test } from 'node:test';
-import { makeSetupPayload, mountSetup, parseDirectoryLines, redactUiMessage, selectLanguage } from '../console.js';
+import { makeSetupPayload, mountSetup, parseDirectoryLines, redactUiMessage, selectLanguage, UI_LANGUAGES, UI_TRANSLATIONS, uiCopy, uiFieldLabel, uiOptionHint, uiEnumLabel, localizeUiMessage } from '../console.js';
 
 const { JSDOM } = createRequire(process.env.CORTICO_TOOLCHAIN_PACKAGE || new URL('../package.json', import.meta.url))('jsdom');
 
 function fixture() {
   return {
-    version: 1, packageVersion: '0.1.0-preview.1',
+    version: 1, packageVersion: '0.1.0-preview.2',
     form: {
       ownerQQ: '12345678', commandTransport: 'snowluma-native', qqEndpoint: 'http://127.0.0.1:39001',
       qqAccountId: '23456789', qqTokenSecret: 'FIXTURE_QQ_TOKEN', gatewayEndpoint: 'http://127.0.0.1:39002', gatewayTokenSecret: 'FIXTURE_GATEWAY_TOKEN',
@@ -26,7 +26,7 @@ function fixture() {
   };
 }
 
-async function harness({ snapshot = fixture(), invoke, language = 'en' } = {}) {
+async function harness({ snapshot = fixture(), invoke, language = 'en', hostLanguage } = {}) {
   const dom = new JSDOM('<!doctype html><div id="mount"></div>', { url: 'http://127.0.0.1/' });
   const root = dom.window.document.getElementById('mount');
   const controller = new dom.window.AbortController();
@@ -35,7 +35,7 @@ async function harness({ snapshot = fixture(), invoke, language = 'en' } = {}) {
   const owned = [];
   let guard;
   const ctx = {
-    root, language, signal: controller.signal,
+    root, language, ...(hostLanguage ? { host: { language: hostLanguage } } : {}), signal: controller.signal,
     invoke: async (method, args) => {
       calls.push({ method, args: structuredClone(args) });
       if (invoke) {
@@ -86,8 +86,8 @@ test('setup payload keeps secrets write-only and normalizes directory lists', ()
   assert.throws(() => makeSetupPayload({ ...form, ownerQQ: 'group:any' }), /numeric QQ/);
   assert.throws(() => makeSetupPayload({ ...form, workspaceFilesEnabled: true }), /project file directories/);
   assert.deepEqual(parseDirectoryLines('a\r\na\nb'), ['a', 'b']);
-  assert.equal(selectLanguage('zh-Hant'), 'zh');
-  assert.equal(selectLanguage('fr'), 'en');
+  assert.equal(selectLanguage('zh-Hant'), 'zh-Hant');
+  assert.equal(selectLanguage('fr'), 'fr');
   assert.equal(redactUiMessage('fixture-secret ?token=other', { gatewayToken: 'fixture-secret' }), '[redacted] ?token=[redacted]');
 });
 
@@ -193,7 +193,7 @@ test('DSH installer output states that the host remains to be installed', async 
     await h.settle();
     assert.match(h.root.textContent, /尚未安装到 DSH/);
     assert.match(h.root.textContent, /旧式接入说明/);
-    assert.match(h.root.textContent, /Install the host plugin/);
+    assert.ok(h.root.textContent.includes(uiCopy('zh').gatewayHint));
     assert.equal(h.calls.some((call) => call.method === 'applySetup'), false);
   } finally { h.close(); }
 });
@@ -244,4 +244,89 @@ test('status polling keeps unsaved fields and never enables reporting', async ()
     assert.match(h.root.querySelector('.ts-mode').textContent, /Reporting enabled/);
     assert.deepEqual(h.calls.map((call) => call.method), ['getSetup', 'getSetup']);
   } finally { h.close(); }
+});
+
+test('all eleven host languages have complete independent tables and preserve locale variants', () => {
+  assert.deepEqual([...UI_LANGUAGES].sort(), Object.keys(UI_TRANSLATIONS).sort());
+  for (const language of UI_LANGUAGES) {
+    for (const kind of ['copy', 'labels', 'hints']) {
+      assert.deepEqual(Object.keys(UI_TRANSLATIONS[language][kind]).sort(), Object.keys(UI_TRANSLATIONS.en[kind]).sort(), `${language}/${kind}`);
+      for (const [key, value] of Object.entries(UI_TRANSLATIONS[language][kind])) {
+        for (const text of Array.isArray(value) ? value : [value]) assert.ok(typeof text === 'string' && text.trim(), `${language}/${kind}/${key}`);
+      }
+    }
+    assert.equal(uiCopy(language).steps.length, 4);
+    assert.ok(uiCopy(language).ownerHint.includes('#@'));
+    assert.ok(uiCopy(language).toggleHint.includes('#@'));
+    assert.ok(uiCopy(language).kitSelectProfile.includes('INSTALL'));
+    assert.ok(uiCopy(language).gatewayCredentialInvalid.includes('32'));
+    assert.ok(uiCopy(language).credentialInvalid.includes('8192'));
+    assert.ok(uiCopy(language).invalidDirectory.includes('100'));
+  }
+  for (const [locale, expected] of Object.entries({ 'zh-CN': 'zh', 'zh-SG': 'zh', 'zh_TW': 'zh-Hant', 'zh-HK': 'zh-Hant', 'zh-Hant': 'zh-Hant', 'ja-JP': 'ja', 'ko-KR': 'ko', 'fr-FR': 'fr', 'de-DE': 'de', 'es-MX': 'es-419', 'es-419': 'es-419', 'pt_BR': 'pt-BR', 'it-IT': 'it', 'ru-RU': 'ru', 'en-GB': 'en', 'unknown': 'en' })) assert.equal(selectLanguage(locale), expected);
+});
+
+for (const language of UI_LANGUAGES) {
+  test(`${language} renders translated setup, advanced fields, connection diagnostics and installer instructions`, async () => {
+    const snapshot = fixture(), t = uiCopy(language);
+    snapshot.warnings = ['While OFF, ordinary owner chat is ignored; the original #@ command still toggles supervision. OFF cannot erase previously delivered content or cancel submitted native operations.'];
+    snapshot.steps = ['Check connections, save and apply. Wait one second, then send a new private #@ to enable; repeat to close.'];
+    snapshot.components.command = { status: 'error', error: 'SOURCE_UNAVAILABLE' };
+    snapshot.optionSchemas.conversation.properties = Object.fromEntries(Object.keys(UI_TRANSLATIONS.en.labels).map(key => [key, { title: '原始中文字段', description: '原始中文说明', type: 'string', ...(key === 'sourceMode' ? { enum: ['memory', 'workspace'] } : key === 'notificationPolicy' ? { enum: ['important'] } : {}) }]));
+    Object.assign(snapshot.form.conversationOptions, Object.fromEntries(Object.keys(UI_TRANSLATIONS.en.labels).map(key => [key, key === 'sourceMode' ? 'memory' : key === 'notificationPolicy' ? 'important' : 'fixture'])));
+    const h = await harness({ language, snapshot, invoke: async method => {
+      if (method === 'checkConnections') return { ok: true, checks: [{ id: 'gateway', status: 'ok', message: 'Authenticated loopback gateway health and project scope checks succeeded.' }] };
+      if (method === 'gatewayInstall') return { kind: 'local-private-install-kit', installed: false, filename: 'install-task-supervisor-gateway.cmd', content: '@echo off', kitDirectory: '/fixture/private-kit', runCommand: 'node "/fixture/private-kit/install-gateway.mjs"', warning: 'Installer prepared locally; not installed yet. The kit contains a private credential. Do not share it. DSH must load this native plugin; the Cortico World cannot replace that host.', steps: ['Choose DSH_HOME and an existing profile such as desktop. The installer displays the exact YAML targets and asks for INSTALL.'] };
+    } });
+    try {
+      assert.equal(h.root.querySelector('h1').textContent, t.title);
+      assert.equal(h.root.querySelector('.task-supervisor').lang, language === 'zh' ? 'zh-CN' : language);
+      assert.equal(h.root.querySelector('.ts-native-requirement').textContent, t.nativeRequirement);
+      h.step(2);
+      for (const [key, label] of Object.entries(UI_TRANSLATIONS[language].labels)) {
+        const input = h.root.querySelector(`[data-option="conversationOptions.${key}"]`);
+        assert.ok(input, `${language}/${key} control exists`);
+        assert.equal(h.root.querySelector(`label[for="${input.id}"]`).textContent, label);
+        const hint = uiOptionHint(key, language);
+        if (hint) assert.ok(input.closest('.ts-field').textContent.includes(hint));
+      }
+      assert.equal(h.root.querySelector('[data-option="conversationOptions.sourceMode"] option').textContent, uiEnumLabel('memory', language));
+      assert.ok(!h.root.textContent.includes('原始中文字段'));
+      h.step(3);
+      assert.ok(h.root.textContent.includes(t.offLimits));
+      assert.ok(h.root.textContent.includes(t.armInstruction));
+      assert.ok(h.root.textContent.includes(t.componentIssue));
+      assert.ok(h.root.textContent.includes('SOURCE_UNAVAILABLE'));
+      h.click(t.check);
+      await h.settle();
+      assert.ok(h.root.textContent.includes(t.gatewayCheckOk));
+      assert.equal(h.root.querySelector('.ts-result strong').textContent, t.gateway);
+      h.click(t.generate);
+      await h.settle();
+      assert.ok(h.root.textContent.includes(t.gatewayPrepared));
+      assert.ok(h.root.textContent.includes(t.kitSecurity));
+      assert.ok(h.root.textContent.includes(t.kitSelectProfile));
+      assert.equal(h.root.querySelectorAll('.ts-local-path')[0].textContent, '/fixture/private-kit');
+      assert.equal(h.root.querySelectorAll('.ts-local-path')[1].textContent, 'node "/fixture/private-kit/install-gateway.mjs"');
+      assert.equal(h.root.querySelector('.ts-mode').dataset.enabled, 'false');
+      assert.deepEqual(h.calls.map(call => call.method), ['getSetup', 'checkConnections', 'gatewayInstall']);
+    } finally { h.close(); }
+  });
+}
+
+test('host-language fallback and localized errors keep secrets private and identifiers stable', async () => {
+  for (const language of UI_LANGUAGES) {
+    const t = uiCopy(language);
+    assert.equal(localizeUiMessage('Gateway health failed; verify the external DSH plugin and credential.', language), t.gatewayCheckFailed);
+    assert.equal(localizeUiMessage('Invalid codex option type: maxReadBytes.', language), `${t.invalidConfiguration}: ${uiFieldLabel('maxReadBytes', language)}`);
+    assert.equal(localizeUiMessage('dshWorkspaceRoots requires up to 100 absolute directory paths.', language), t.invalidDirectory);
+    assert.equal(localizeUiMessage('Invalid native endpoint: an explicit IPv4 loopback port is required.', language), t.invalidEndpoint);
+    assert.ok(!localizeUiMessage('fixture credential leaked: fixture-secret', language, { qqToken: 'fixture-secret' }).includes('fixture-secret'));
+  }
+  const h = await harness({ language: '' });
+  try { assert.equal(h.root.querySelector('h1').textContent, uiCopy('en').title); }
+  finally { h.close(); }
+  const host = await harness({ language: '', hostLanguage: 'fr-CA' });
+  try { assert.equal(host.root.querySelector('h1').textContent, uiCopy('fr').title); }
+  finally { host.close(); }
 });

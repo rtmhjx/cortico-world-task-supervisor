@@ -1,4 +1,4 @@
-export const PACKAGE_VERSION = '0.1.0-preview.1';
+export const PACKAGE_VERSION = '0.1.0-preview.2';
 export type CommandTransport = 'snowluma-native' | 'onebot-v11' | 'trusted-meta';
 export interface SetupForm {
   ownerQQ: string;

@@ -3,6 +3,7 @@ import { copyFile,mkdir,mkdtemp,stat,writeFile } from 'node:fs/promises';
 import { homedir } from 'node:os';
 import { join } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { uiCopy, uiFieldLabel } from '../console.js';
 import type { WorldContext } from 'cortico/world.ts';
 import type { ToolDef, ToolOutcome, World, WorldHost, WorldWebUiDecl } from 'cortico/core/types.ts';
 import { ConversationControlWorld } from '../vendor/cortico-world-conversation-control/src/world.ts';
@@ -197,8 +198,12 @@ export class TaskSupervisorWorld implements World {
     this.gate?.close();this.gate=undefined;this.host=undefined;
     if(errors.length)throw new AggregateError(errors,'Task Supervisor shutdown failed.');
   }
-  webUi():WorldWebUiDecl{return{config:[TASK_SUPERVISOR_CONFIG_GROUP],panels:[{id:'setup',title:'Task Supervisor',description:'Configure QQ, scopes and gateway; inspect the shared OFF/ON state.',getMethods:['getSetup']}],
-    promptDocs:[{key:'worlds.tasksupervisor.envPrompt',title:'Task Supervisor · Environment',description:'Tool scope, notification policy and native approval boundaries.',role:'envPrompt',path:fileURLToPath(new URL('./ENV_PROMPT.md',import.meta.url)),vars:[{name:'tasksupervisor.owner',description:'Owner QQ account.'},{name:'tasksupervisor.mode',description:'Remote supervision mode.'}]}],
+  webUi(language?:string|{language?:string}):WorldWebUiDecl{
+    const copy=uiCopy(language),config=structuredClone(TASK_SUPERVISOR_CONFIG_GROUP);
+    config.schema.title=copy.metadataConfigTitle;
+    for(const[key,field]of Object.entries(config.schema.properties??{}))field.title=uiFieldLabel(key.split('.').at(-1)!,language);
+    return{config:[config],panels:[{id:'setup',title:copy.metadataPanelTitle,description:copy.metadataPanelDescription,getMethods:['getSetup']}],
+    promptDocs:[{key:'worlds.tasksupervisor.envPrompt',title:copy.metadataPromptTitle,description:copy.metadataPromptDescription,role:'envPrompt',path:fileURLToPath(new URL('./ENV_PROMPT.md',import.meta.url)),vars:[{name:'tasksupervisor.owner',description:copy.metadataOwnerDescription},{name:'tasksupervisor.mode',description:copy.metadataModeDescription}]}],
     invoke:async(panel,method,args)=>{if(panel!=='setup')throw new Error('Unsupported panel.');const request=args[0] as SetupRequest|undefined;
       if(method==='getSetup')return this.getSetup();if(method==='checkConnections')return this.checkConnections(request);
       if(method==='applySetup')return this.applySetup(request);if(method==='gatewayInstall')return this.gatewayInstall(request);throw new Error('Unsupported method.');}};}
