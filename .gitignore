@@ -1,0 +1,11 @@
+node_modules/
+scratch/
+vendor/scratch/
+*.log
+*.tsbuildinfo
+*.tgz
+.env
+.env.*
+*.sqlite
+*.sqlite-*
+*-install-kit/

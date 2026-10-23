@@ -1,0 +1,5 @@
+# Separate DSH host gateway
+
+This is a DSH host plugin. It must run inside the real DSH process; the Cortico aggregate cannot emulate the native host lifecycle APIs. Install this package in DSH and configure explicit project/observation roots, a loopback port, stateDir outside delegated projects and a managed credential reference. Resolve the credential through the DSH credential provider; never put a token in an environment file.
+
+Build from the aggregate root with `node tools/build-vendor.mjs --gateway-only`. The optional Codex WebSocket transport is bundled, including its license; no separate ws installation is required. Desktop IPC is a version-pinned Windows transport and requires explicit user configuration. Set excludedRoots in the gateway plugin configuration to the setup form exclusion array. Its actual path guards, native observer, health and persisted identity share this policy. The optional administrator environment CORTICO_TASK_SUPERVISOR_EXCLUSIONS can add further exclusions. No local paths or credentials are included here.

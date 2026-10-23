@@ -1,0 +1,24 @@
+{
+  "name": "cortico-world-task-supervisor",
+  "version": "0.1.0-preview.1",
+  "type": "module",
+  "description": "One Cortico World for owner-gated DSH and Codex supervision, native conversation control and scoped external memory",
+  "author": "rtmhjx",
+  "repository": { "type": "git", "url": "git+https://github.com/rtmhjx/cortico-world-task-supervisor.git" },
+  "bugs": { "url": "https://github.com/rtmhjx/cortico-world-task-supervisor/issues" },
+  "homepage": "https://github.com/rtmhjx/cortico-world-task-supervisor#readme",
+  "license": "MIT",
+  "engines": { "node": ">=24.0.0" },
+  "main": "./lib/index.js",
+  "keywords": ["cortico-world", "cortico", "coopanion", "dsh", "codex", "task-supervisor"],
+  "cortico": { "kind": "world", "api": 6, "displayName": "Task Supervisor", "describe": "describe.json", "webUiClient": "./console.js", "webUiStyle": "./styles.css", "tags": ["im", "qq", "apps", "experimental", "unofficial-api", "unsafe", "sensitive-data"], "locales": { "zh": { "displayName": "任务监管", "description": "一个 World 整合 DSH/Codex 任务通知、本人 QQ 私聊开关、原生会话控制与外部记忆。" }, "en": { "displayName": "Task Supervisor", "description": "One World for DSH/Codex task boundaries, owner-only QQ supervision, native conversation control and scoped external memory." } } },
+  "files": ["lib/", "src/", "vendor/", "tools/", "tests/", "tsconfig.vendor.json", "console.js", "styles.css", "describe.json", "README.md", "BUILDING.md", "SOURCES.md", "LICENSE", "NOTICE", "THIRD-PARTY-LICENSES.txt", "SECURITY.md", "CHANGELOG.md"],
+  "scripts": {
+    "build": "node tools/build.mjs",
+    "verify-build": "node tools/build.mjs --verify",
+    "typecheck": "node tools/typecheck-vendor.mjs --all",
+    "test": "node tools/test-vendor.mjs"
+  },
+  "dependencies": { "ws": "^8.18.3", "yaml": "^2.9.0" },
+  "devDependencies": { "@types/node": "^24.0.0", "@types/ws": "^8.18.2", "cortico": "^0.2.6", "esbuild": "0.28.2", "tsx": "^4.23.1", "typescript": "^5.9.0", "vitest": "^2.1.9", "jsdom": "^26.0.0" }
+}

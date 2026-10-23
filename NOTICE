@@ -1,0 +1,21 @@
+Task Supervisor for Cortico
+Copyright (c) 2026 Cortico bridge contributors
+Distributed under the included MIT LICENSE.
+
+Source provenance is documented in SOURCES.md. The local vendor adapters retain
+the conversation-control 0.2.1, Codex bridge 0.2 and DSH memory 0.5 feature
+baselines, with portable exclusions and the common task-reporting gate. The
+optional SnowLuma native helper is derived from the same workbench's pure-source
+bridge; no private runtime installer, account configuration or service data is
+included. Every vendor component retains its own LICENSE and NOTICE.
+
+The Cortico SDK and host are separate dependencies under their upstream license:
+https://github.com/Pal-AI-Lab/Cortico
+MIT, Copyright 2026 Phantivia.
+DSH, Codex and SnowLuma host runtimes are not redistributed in this package.
+
+The self-contained native Gateway bundles ws. The standalone installer bundles
+yaml. Their complete license texts and exact build versions are recorded in
+THIRD-PARTY-LICENSES.txt and embedded in the corresponding single-file programs.
+No third-party native binary is bundled. Optional runtime packages and test-only
+dependencies retain the licenses supplied by their respective publishers.

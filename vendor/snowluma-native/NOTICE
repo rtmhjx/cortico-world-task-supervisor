@@ -1,0 +1,4 @@
+Derived from the Cortico bridge workbench, MIT as declared by its component manifests.
+Cortico SDK/host: https://github.com/Pal-AI-Lab/Cortico (MIT, Copyright 2026 Phantivia).
+DSH and Codex are separate installed hosts; no host binary, credentials, sessions or databases are included.
+Community modifications: portable path policy, unified task-reporting gate and source-only test fixtures.

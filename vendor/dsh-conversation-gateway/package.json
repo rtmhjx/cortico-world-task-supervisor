@@ -1,0 +1,19 @@
+{
+  "name": "dsh-conversation-gateway",
+  "version": "0.1.10",
+  "private": true,
+  "type": "module",
+  "license": "MIT",
+  "engines": {
+    "node": ">=24"
+  },
+  "main": "./lib/index.js",
+  "files": [
+    "lib/",
+    "src/",
+    "console.js",
+    "README.md",
+    "LICENSE",
+    "NOTICE"
+  ]
+}
