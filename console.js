@@ -2,8 +2,8 @@
 export const UI_TRANSLATIONS = {
   "zh": {
     "copy": {
-      "title": "任务托管",
-      "eyebrow": "TASK SUPERVISOR",
+      "title": "dsh，codex等工作agent的实时汇报与控制桥",
+      "eyebrow": "DSH、CODEX CONTRLO WORLD",
       "intro": "把 DSH 与 Codex 接到 Coo，离开电脑后通过 QQ 接手。",
       "steps": [
         "连接服务",
@@ -245,8 +245,8 @@ export const UI_TRANSLATIONS = {
     "copy": {
       "nativeRequirement": "SnowLuma native connections require the native add-on included in this package. Installing SnowLuma itself does not provide this API.",
       "duplicateOwner": "Do not let another QQ World also listen to private messages from the same owner; duplicate listeners create two channels.",
-      "title": "Task supervisor",
-      "eyebrow": "TASK SUPERVISOR",
+      "title": "DSH、CODEX CONTRLO WORLD",
+      "eyebrow": "WORLD API 6",
       "intro": "Connect DSH and Codex to Coo, then take over through QQ when away.",
       "steps": [
         "Connect",
@@ -486,8 +486,8 @@ export const UI_TRANSLATIONS = {
     "copy": {
       "nativeRequirement": "SnowLuma 原生連線需要本套件附帶的原生附加元件；僅安裝 SnowLuma 主程式並不會提供此 API。",
       "duplicateOwner": "請勿讓另一個 QQ World 同時監聽這位主人的私訊，以免形成重複通道。",
-      "title": "任務託管",
-      "eyebrow": "TASK SUPERVISOR",
+      "title": "dsh，codex等工作agent的实时汇报与控制桥",
+      "eyebrow": "DSH、CODEX CONTRLO WORLD",
       "intro": "將 DSH 與 Codex 接到 Coo，離開電腦後透過 QQ 接手。",
       "steps": [
         "連線服務",
@@ -727,8 +727,8 @@ export const UI_TRANSLATIONS = {
     "copy": {
       "nativeRequirement": "SnowLuma のネイティブ接続には、このパッケージに付属するネイティブ追加モジュールが必要です。SnowLuma 本体をインストールするだけでは、この API は利用できません。",
       "duplicateOwner": "同じオーナーの個人チャットを別の QQ World でも監視すると、経路が重複します。同時に監視しないでください。",
-      "title": "タスク管理",
-      "eyebrow": "TASK SUPERVISOR",
+      "title": "DSH、CODEX CONTRLO WORLD",
+      "eyebrow": "WORLD API 6",
       "intro": "DSH と Codex を Coo に接続し、パソコンを離れた後は QQ から操作します。",
       "steps": [
         "サービス接続",
@@ -968,8 +968,8 @@ export const UI_TRANSLATIONS = {
     "copy": {
       "nativeRequirement": "SnowLuma 네이티브 연결에는 이 패키지에 포함된 네이티브 추가 모듈이 필요합니다. SnowLuma 본체만 설치해서는 이 API를 사용할 수 없습니다.",
       "duplicateOwner": "다른 QQ World가 같은 소유자의 개인 채팅을 동시에 수신하지 않도록 하세요. 두 통로가 생겨 중복 처리될 수 있습니다.",
-      "title": "작업 관리",
-      "eyebrow": "TASK SUPERVISOR",
+      "title": "DSH、CODEX CONTRLO WORLD",
+      "eyebrow": "WORLD API 6",
       "intro": "DSH와 Codex를 Coo에 연결하고, 컴퓨터를 떠난 뒤에는 QQ로 작업을 이어가세요.",
       "steps": [
         "서비스 연결",
@@ -1209,8 +1209,8 @@ export const UI_TRANSLATIONS = {
     "copy": {
       "nativeRequirement": "Les connexions natives SnowLuma nécessitent le module natif fourni dans ce paquet. L’installation de SnowLuma seul ne fournit pas cette API.",
       "duplicateOwner": "Ne laissez pas un autre QQ World écouter aussi les messages privés du même propriétaire : deux écouteurs créeraient deux canaux.",
-      "title": "Task Supervisor",
-      "eyebrow": "TASK SUPERVISOR",
+      "title": "DSH、CODEX CONTRLO WORLD",
+      "eyebrow": "WORLD API 6",
       "intro": "Connectez DSH et Codex à Coo, puis prenez le relais via QQ lorsque vous vous absentez.",
       "steps": [
         "Connexion",
@@ -1450,8 +1450,8 @@ export const UI_TRANSLATIONS = {
     "copy": {
       "nativeRequirement": "Native SnowLuma-Verbindungen benötigen das native Zusatzmodul aus diesem Paket. Die Installation von SnowLuma allein stellt diese API nicht bereit.",
       "duplicateOwner": "Lassen Sie keine weitere QQ World private Nachrichten desselben Eigentümers empfangen; doppelte Empfänger erzeugen zwei Kanäle.",
-      "title": "Task Supervisor",
-      "eyebrow": "TASK SUPERVISOR",
+      "title": "DSH、CODEX CONTRLO WORLD",
+      "eyebrow": "WORLD API 6",
       "intro": "Verbinden Sie DSH und Codex mit Coo und übernehmen Sie unterwegs über QQ.",
       "steps": [
         "Verbinden",
@@ -1691,8 +1691,8 @@ export const UI_TRANSLATIONS = {
     "copy": {
       "nativeRequirement": "Las conexiones nativas de SnowLuma requieren el complemento nativo incluido en este paquete. Instalar solo SnowLuma no proporciona esta API.",
       "duplicateOwner": "No permitas que otro QQ World también reciba mensajes privados del mismo propietario; dos receptores crean dos canales.",
-      "title": "Task Supervisor",
-      "eyebrow": "TASK SUPERVISOR",
+      "title": "DSH、CODEX CONTRLO WORLD",
+      "eyebrow": "WORLD API 6",
       "intro": "Conecta DSH y Codex a Coo y toma el control por QQ cuando estés fuera.",
       "steps": [
         "Conectar",
@@ -1932,8 +1932,8 @@ export const UI_TRANSLATIONS = {
     "copy": {
       "nativeRequirement": "As conexões nativas do SnowLuma exigem o complemento nativo incluído neste pacote. Instalar apenas o SnowLuma não disponibiliza esta API.",
       "duplicateOwner": "Não permita que outro QQ World também receba mensagens privadas do mesmo proprietário; receptores duplicados criam dois canais.",
-      "title": "Task Supervisor",
-      "eyebrow": "TASK SUPERVISOR",
+      "title": "DSH、CODEX CONTRLO WORLD",
+      "eyebrow": "WORLD API 6",
       "intro": "Conecte o DSH e o Codex ao Coo e assuma o controle pelo QQ quando estiver fora.",
       "steps": [
         "Conectar",
@@ -2173,8 +2173,8 @@ export const UI_TRANSLATIONS = {
     "copy": {
       "nativeRequirement": "Le connessioni native SnowLuma richiedono il componente aggiuntivo nativo incluso in questo pacchetto. Installare solo SnowLuma non rende disponibile questa API.",
       "duplicateOwner": "Non consentire a un altro QQ World di ricevere anche i messaggi privati dello stesso proprietario: due ricevitori creano due canali.",
-      "title": "Task Supervisor",
-      "eyebrow": "TASK SUPERVISOR",
+      "title": "DSH、CODEX CONTRLO WORLD",
+      "eyebrow": "WORLD API 6",
       "intro": "Collega DSH e Codex a Coo, poi prendi il controllo tramite QQ quando sei fuori.",
       "steps": [
         "Collega",
@@ -2414,8 +2414,8 @@ export const UI_TRANSLATIONS = {
     "copy": {
       "nativeRequirement": "Для нативного подключения SnowLuma нужно нативное дополнение из этого пакета. Установка только самой SnowLuma не предоставляет этот API.",
       "duplicateOwner": "Не включайте одновременное чтение личного чата этого владельца в другом QQ World: это создаст два канала обработки.",
-      "title": "Управление задачами",
-      "eyebrow": "TASK SUPERVISOR",
+      "title": "DSH、CODEX CONTRLO WORLD",
+      "eyebrow": "WORLD API 6",
       "intro": "Подключите DSH и Codex к Coo, чтобы управлять работой через QQ вдали от компьютера.",
       "steps": [
         "Подключение",

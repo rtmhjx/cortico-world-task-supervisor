@@ -1,6 +1,14 @@
 Owner: `src/definition.ts`.
 
-# Changelog
+# 更新记录 / Changelog
+
+## 0.1.0-preview.3
+
+- 正式中文名为「dsh，codex等工作agent的实时汇报与控制桥」，正式英文名为「DSH、CODEX CONTRLO WORLD」。包名、World ID、工具/事件 ID 保持原值。 / Adopt the exact official Chinese and English project names while retaining technical identifiers.
+- 项目独立维护与发布；中文优先说明安装、本人 QQ 开关和任务确认边界。 / Present installation and authorization in Chinese first, with an English reference.
+- 默认扩展名含中英文；中文界面显示中文正式名，英文及其余语言界面显示英文正式名；长标题允许换行。十一种语言的功能文案继续保留。 / Update human metadata and wrapping titles without changing localized feature text.
+- 本次仅调整版本、名称、文档和展示。汇报筛选、OFF/ON、积压、本人身份校验、范围、草案/确认与原生权限语义保持不变。 / This naming/documentation revision does not change supervision, scopes, approvals or native operations.
+- 旧版本与封存件保留。历史技术名称 `cortico-world-task-supervisor`、`tasksupervisor` 继续用于安装与 API，不作为新的项目正式名。
 
 ## 0.1.0-preview.2
 

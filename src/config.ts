@@ -115,4 +115,4 @@ export function optionSchemas() {
 const props = Object.fromEntries(Object.entries(taskSupervisorDefaults()).filter(([key]) => key !== 'enabled').map(([key, value]) =>
   [`worlds.tasksupervisor.${key}`, { type: typeof value === 'boolean' ? 'boolean' : 'string', title: key, 'x-hot': false }]));
 export const TASK_SUPERVISOR_CONFIG_GROUP: ConfigGroup = { id: 'world:tasksupervisor', owner: 'world:tasksupervisor',
-  schema: { type: 'object', title: 'Task Supervisor · 单 World 任务监管', properties: props as ConfigGroup['schema']['properties'] } };
+  schema: { type: 'object', title: "dsh，codex等工作agent的实时汇报与控制桥 / DSH、CODEX CONTRLO WORLD", properties: props as ConfigGroup['schema']['properties'] } };

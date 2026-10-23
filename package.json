@@ -1,8 +1,8 @@
 {
   "name": "cortico-world-task-supervisor",
-  "version": "0.1.0-preview.2",
+  "version": "0.1.0-preview.3",
   "type": "module",
-  "description": "One Cortico World for owner-gated DSH and Codex supervision, native conversation control and scoped external memory",
+  "description": "独立的 World API 6 扩展：dsh、codex等工作agent的重要任务汇报、本人QQ私聊开关、授权会话控制与限定范围读取。",
   "author": "rtmhjx",
   "repository": {
     "type": "git",
@@ -28,7 +28,7 @@
   "cortico": {
     "kind": "world",
     "api": 6,
-    "displayName": "Task Supervisor",
+    "displayName": "dsh，codex等工作agent的实时汇报与控制桥 / DSH、CODEX CONTRLO WORLD",
     "describe": "describe.json",
     "webUiClient": "./console.js",
     "webUiStyle": "./styles.css",
@@ -43,12 +43,12 @@
     ],
     "locales": {
       "zh": {
-        "displayName": "任务监管",
-        "description": "一个 World 整合 DSH/Codex 任务通知、本人 QQ 私聊开关、原生会话控制与外部记忆。"
+        "displayName": "dsh，codex等工作agent的实时汇报与控制桥",
+        "description": "独立维护的单 World 扩展：dsh、codex等工作agent的重要事件汇报、本人QQ私聊开关、授权会话控制与限定范围读取。"
       },
       "en": {
-        "displayName": "Task Supervisor",
-        "description": "One World for DSH/Codex task boundaries, owner-only QQ supervision, native conversation control and scoped external memory."
+        "displayName": "DSH、CODEX CONTRLO WORLD",
+        "description": "An independent World API 6 bridge for work agents: owner-gated QQ task reports, native conversation control and scoped source reads."
       }
     }
   },

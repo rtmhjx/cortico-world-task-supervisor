@@ -4,7 +4,7 @@ import { TaskSupervisorWorld, qqSendTool,statusTool } from './world.ts';
 import { catalogTools } from './catalog.ts';
 
 export const TASK_SUPERVISOR:WorldDefinition<TaskSupervisorConfig>={
-  id:'tasksupervisor',label:'Task Supervisor',defaults:taskSupervisorDefaults,
+  id:'tasksupervisor',label:"dsh，codex等工作agent的实时汇报与控制桥 / DSH、CODEX CONTRLO WORLD",defaults:taskSupervisorDefaults,
   create:context=>new TaskSupervisorWorld({context}),
   describe:{tools:[statusTool,qqSendTool,...catalogTools()].map(({handler:_handler,...tool})=>tool),
     events:[

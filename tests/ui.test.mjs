@@ -1,13 +1,17 @@
 import assert from 'node:assert/strict';
 import { createRequire } from 'node:module';
 import { test } from 'node:test';
+import { readFileSync } from 'node:fs';
 import { makeSetupPayload, mountSetup, parseDirectoryLines, redactUiMessage, selectLanguage, UI_LANGUAGES, UI_TRANSLATIONS, uiCopy, uiFieldLabel, uiOptionHint, uiEnumLabel, localizeUiMessage } from '../console.js';
 
 const { JSDOM } = createRequire(process.env.CORTICO_TOOLCHAIN_PACKAGE || new URL('../package.json', import.meta.url))('jsdom');
 
+const OFFICIAL_ZH = 'dsh，codex等工作agent的实时汇报与控制桥';
+const OFFICIAL_EN = 'DSH、CODEX CONTRLO WORLD';
+
 function fixture() {
   return {
-    version: 1, packageVersion: '0.1.0-preview.2',
+    version: 1, packageVersion: '0.1.0-preview.3',
     form: {
       ownerQQ: '12345678', commandTransport: 'snowluma-native', qqEndpoint: 'http://127.0.0.1:39001',
       qqAccountId: '23456789', qqTokenSecret: 'FIXTURE_QQ_TOKEN', gatewayEndpoint: 'http://127.0.0.1:39002', gatewayTokenSecret: 'FIXTURE_GATEWAY_TOKEN',
@@ -71,6 +75,28 @@ async function harness({ snapshot = fixture(), invoke, language = 'en', hostLang
   const settle = () => new Promise((resolve) => setImmediate(resolve));
   return { root, snapshot, calls, intervals, ctx, click, step, input, settle, guard: () => guard?.(), close() { controller.abort(); resource?.dispose(); owned.forEach((item) => item.dispose()); dom.window.close(); } };
 }
+
+test('official names survive full long headings, accessibility labels and package metadata in each language', async () => {
+  const pkg = JSON.parse(readFileSync(new URL('../package.json', import.meta.url), 'utf8'));
+  assert.equal(pkg.name, 'cortico-world-task-supervisor');
+  assert.equal(pkg.version, '0.1.0-preview.3');
+  assert.equal(pkg.cortico.displayName, `${OFFICIAL_ZH} / ${OFFICIAL_EN}`);
+  assert.equal(pkg.cortico.locales.zh.displayName, OFFICIAL_ZH);
+  assert.equal(pkg.cortico.locales.en.displayName, OFFICIAL_EN);
+  assert.deepEqual(Object.keys(pkg.cortico.locales).sort(), ['en', 'zh']);
+  for (const language of UI_LANGUAGES) {
+    const h = await harness({ language });
+    try {
+      const expected = language.startsWith('zh') ? OFFICIAL_ZH : OFFICIAL_EN;
+      assert.equal(h.root.querySelector('h1').textContent, expected);
+      assert.equal(h.root.querySelector('.ts-steps').getAttribute('aria-label'), expected);
+      assert.equal(uiCopy(language).metadataPanelTitle, expected);
+      assert.equal(h.root.querySelectorAll('h1').length, 1);
+      assert.equal(h.root.querySelector('.ts-mode').dataset.enabled, 'false');
+      assert.ok(h.calls.every(call => call.method === 'getSetup'));
+    } finally { h.close(); }
+  }
+});
 
 test('setup payload keeps secrets write-only and normalizes directory lists', () => {
   const form = fixture().form;

@@ -75,7 +75,7 @@ async function main(){
   const readline=createInterface({input:process.stdin,output:process.stdout});
   try{
     const kitDir=dirname(fileURLToPath(import.meta.url));
-    console.log('Task Supervisor external DSH gateway installer. No credential will be printed.');
+    console.log('DSH、CODEX CONTRLO WORLD external DSH gateway installer. No credential will be printed.');
     const dshHome=(await readline.question('DSH_HOME directory (contains profiles/): ')).trim().replace(/^"|"$/g,'');
     const profileName=(await readline.question('Existing profile name [desktop]: ')).trim()||'desktop';
     if(!/^[a-zA-Z0-9._-]+$/.test(profileName))throw new Error('Use an existing single profile directory name.');
@@ -84,7 +84,7 @@ async function main(){
     const update=(await readline.question('Update an existing conversation-gateway definition if present? [y/N]: ')).trim().toLowerCase()==='y';
     if((await readline.question('Install these files now? Type INSTALL: ')).trim()!=='INSTALL'){console.log('No changes made.');return;}
     const result=await installGateway({kitDir,dshHome:resolve(dshHome),profileDir,updateExisting:update});
-    console.log('Gateway installed. Restart the selected DSH host, then use Check connections in Task Supervisor.');
+    console.log('Gateway installed. Restart the selected DSH host, then use Check connections in DSH、CODEX CONTRLO WORLD.');
     console.log(`Backups saved: ${result.backups.length}. The private kit contains a credential; keep it private or remove it after verified installation.`);
   }finally{readline.close();}
 }

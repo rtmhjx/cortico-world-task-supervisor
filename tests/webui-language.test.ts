@@ -2,10 +2,12 @@ import assert from 'node:assert/strict';
 import test from 'node:test';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
+import { readFileSync } from 'node:fs';
 import type { World } from 'cortico/core/types.ts';
 import type { WorldContext } from 'cortico/world.ts';
 import { TaskSupervisorWorld } from '../src/world.ts';
 import { TASK_SUPERVISOR_CONFIG_GROUP, taskSupervisorDefaults, type TaskSupervisorConfig } from '../src/config.ts';
+import { TASK_SUPERVISOR } from '../src/definition.ts';
 
 test('the real World language argument localizes human metadata without mutating identifiers, config or model text', () => {
   const context = {
@@ -13,6 +15,11 @@ test('the real World language argument localizes human metadata without mutating
     secret: () => '', persist: () => {}, storeSecret: () => {}, restart: async () => {},
   } as unknown as WorldContext<TaskSupervisorConfig>;
   const world: World = new TaskSupervisorWorld({ context });
+  const zh = 'dsh，codex等工作agent的实时汇报与控制桥', en = 'DSH、CODEX CONTRLO WORLD';
+  const pkg = JSON.parse(readFileSync(new URL('../package.json', import.meta.url), 'utf8'));
+  assert.equal(TASK_SUPERVISOR.id, 'tasksupervisor');
+  assert.equal(TASK_SUPERVISOR.label, `${zh} / ${en}`);
+  assert.equal(pkg.cortico.displayName, TASK_SUPERVISOR.label);
   const languages = ['zh', 'zh-Hant', 'en', 'ja', 'ko', 'fr', 'de', 'es-419', 'pt-BR', 'it', 'ru'] as const;
   const originalSchema = structuredClone(TASK_SUPERVISOR_CONFIG_GROUP.schema);
   const modelVariables = world.envPromptVars();
@@ -24,6 +31,8 @@ test('the real World language argument localizes human metadata without mutating
     assert.equal(group.id, TASK_SUPERVISOR_CONFIG_GROUP.id);
     assert.equal(panel.id, 'setup');
     assert.equal(typeof panel.title, 'string');
+    assert.equal(panel.title, language.startsWith('zh') ? zh : en);
+    assert.equal(group.schema.title, panel.title);
     assert.equal(typeof panel.description, 'string');
     assert.ok(panel.description!.length > 10);
     if (language !== 'en') assert.notEqual(panel.description, english.panels![0].description);

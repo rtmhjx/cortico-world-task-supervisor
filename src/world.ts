@@ -40,11 +40,11 @@ function parameterDocs(value: unknown, key = 'input'): unknown {
   if (Array.isArray(value)) return value.map(item => parameterDocs(item,key));
   if (!value || typeof value !== 'object') return value;
   return Object.fromEntries(Object.entries(value).map(([name,item]) => [name,
-    name === 'description' && typeof item === 'string' && /[\u3400-\u9fff]/.test(item) ? `Input: ${key}. See the Task Supervisor environment instructions.` : parameterDocs(item,name)]));
+    name === 'description' && typeof item === 'string' && /[\u3400-\u9fff]/.test(item) ? `Input: ${key}. See the DSH、CODEX CONTRLO WORLD environment instructions.` : parameterDocs(item,name)]));
 }
 export function toolDeclaration(tool: ToolDef): ToolDef {
   const name = renamed(tool.name);
-  return { ...tool, name, description: `Task Supervisor ${name.replace(/^tasksupervisor_/, '').replaceAll('_',' ')}. Reads and controls are unavailable while remote supervision is OFF. Preserve source IDs, cursors, scope and native approvals.`,
+  return { ...tool, name, description: `DSH、CODEX CONTRLO WORLD ${name.replace(/^tasksupervisor_/, '').replaceAll('_',' ')}. Reads and controls are unavailable while remote supervision is OFF. Preserve source IDs, cursors, scope and native approvals.`,
     parameters: parameterDocs(tool.parameters) as ToolDef['parameters'] };
 }
 export const statusTool: ToolDef = { name: 'tasksupervisor_status', description: 'Read the remote-supervision switch and component availability only. Does not expose task content or change the switch.',
@@ -134,7 +134,7 @@ export class TaskSupervisorWorld implements World {
   }
   private modelStatus() { this.gate&&this.host&&this.gate.syncCommands(this.host.store);return{reporting:this.gate?.snapshot()??null,components:Object.fromEntries(this.components.map(p=>[p.key,{status:p.state.status}]))}; }
   async start(host:WorldHost):Promise<void>{
-    if(this.host)throw new Error('Task Supervisor is already started.');
+    if(this.host)throw new Error('DSH、CODEX CONTRLO WORLD is already started.');
     this.host=host;this.stopping=false;
     if(!this.cfg.ownerQQ)return;
     try{
@@ -196,7 +196,7 @@ export class TaskSupervisorWorld implements World {
     const errors=results.filter((result):result is PromiseRejectedResult=>result.status==='rejected').map(result=>result.reason);
     for(const part of this.components){part.running=false;part.state={status:'disabled'};}
     this.gate?.close();this.gate=undefined;this.host=undefined;
-    if(errors.length)throw new AggregateError(errors,'Task Supervisor shutdown failed.');
+    if(errors.length)throw new AggregateError(errors,'DSH、CODEX CONTRLO WORLD shutdown failed.');
   }
   webUi(language?:string|{language?:string}):WorldWebUiDecl{
     const copy=uiCopy(language),config=structuredClone(TASK_SUPERVISOR_CONFIG_GROUP);

@@ -18,9 +18,10 @@
 .task-supervisor button:disabled { cursor: wait; opacity: .55; }
 .task-supervisor :focus-visible { outline: 2px solid var(--ts-accent); outline-offset: 3px; }
 .task-supervisor [hidden] { display: none !important; }
-.ts-header { display: grid; grid-template-columns: 1fr minmax(230px, 30%); gap: 32px; padding: 26px 0 30px; border-bottom: 1px solid var(--ts-line); }
+.ts-header { display: grid; grid-template-columns: minmax(0, 1fr) minmax(230px, 30%); gap: 32px; padding: 26px 0 30px; border-bottom: 1px solid var(--ts-line); }
+.ts-header > * { min-width: 0; }
 .ts-eyebrow { color: var(--ts-muted); font: 600 10px/1.4 'Cascadia Code', 'Consolas', monospace; letter-spacing: .2em; }
-.task-supervisor h1 { font-size: clamp(26px, 4cqw, 38px); font-weight: 600; letter-spacing: -.04em; line-height: 1.25; margin: 12px 0 14px; }
+.task-supervisor h1 { max-width: 100%; overflow-wrap: anywhere; word-break: normal; white-space: normal; font-size: clamp(26px, 4cqw, 38px); font-weight: 600; letter-spacing: -.04em; line-height: 1.25; margin: 12px 0 14px; }
 .ts-intro { max-width: 580px; margin: 0; color: var(--ts-muted); }
 .ts-mode { border-left: 2px solid var(--ts-line); padding: 2px 0 0 20px; }
 .ts-mode[data-enabled='true'] { border-color: var(--ts-accent); }
