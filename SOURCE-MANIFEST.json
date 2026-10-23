@@ -11,6 +11,7 @@
     "SECURITY.md",
     "SOURCES.md",
     "THIRD-PARTY-LICENSES.txt",
+    "console.d.ts",
     "console.js",
     "describe.json",
     "package-lock.json",
@@ -37,8 +38,8 @@
   ],
   "encoding": "UTF-8 without BOM",
   "lineEndings": "LF",
-  "sourceFileCount": 148,
-  "sourceTreeSha256": "146ab85ae27110e6f7a14472aa17c77af1fb9a987297551df85a8d999bb72499",
+  "sourceFileCount": 150,
+  "sourceTreeSha256": "5998154f11039f5cade8f485a82ea4c48c0d91c2f55ba7ec9c56d6d6401a1fb8",
   "files": [
     {
       "path": ".gitattributes",
@@ -57,8 +58,8 @@
     },
     {
       "path": "CHANGELOG.md",
-      "bytes": 673,
-      "sha256": "54575aacbc8c50e2e2f24a04751318393e3f5f5b02300e962762f526ba508a50"
+      "bytes": 1582,
+      "sha256": "6dae34c967f29cd13c7086350e2effd9e213ed0697a4411700d64ffd38fa2f0f"
     },
     {
       "path": "LICENSE",
@@ -72,8 +73,8 @@
     },
     {
       "path": "README.md",
-      "bytes": 11751,
-      "sha256": "7e0165353e752fafec94d96871bbc40a4689f1e5f9bb2e50b6729f8c55ff1a33"
+      "bytes": 13112,
+      "sha256": "75026325d38f611c3a8d5fa36cba4265a938b204ba8018663b46f431aa76681f"
     },
     {
       "path": "SECURITY.md",
@@ -91,14 +92,19 @@
       "sha256": "f448ac0e8b410c8acf5a1e3fc2193f5195f90539413f1611d6194e3a06975115"
     },
     {
+      "path": "console.d.ts",
+      "bytes": 648,
+      "sha256": "6d487be37feba7986dfbea7fa755973077cf41cbe8ed63446d6f2c3e68fba501"
+    },
+    {
       "path": "console.js",
-      "bytes": 44159,
-      "sha256": "f351c54a3d59b138f0f6817753f77d8daccc224c9eb752d2190a3ec815828886"
+      "bytes": 268038,
+      "sha256": "850cbeabfbb16643f628438d4abb72ac246a3425e919457bec8284948fb038ef"
     },
     {
       "path": "describe.json",
-      "bytes": 32347,
-      "sha256": "7232a44c2caf6b53ef027c31928e606ca16704d59ca1cc9829ba1065be731711"
+      "bytes": 32332,
+      "sha256": "33f9b8382ab91a33a5d8c98ecd3c073308db186cfc03a768adcfb94c4eb677d8"
     },
     {
       "path": "lib/ENV_PROMPT.md",
@@ -117,13 +123,13 @@
     },
     {
       "path": "lib/index.js",
-      "bytes": 416141,
-      "sha256": "529b89d6a81d54c1b108a5914c0a9274c586268ea870e81c36ebdc420e2fdff1"
+      "bytes": 744110,
+      "sha256": "16ac6160dd9f0a86fee99f2b4ff2334fe01723c01e86eac46d33a189df2660f4"
     },
     {
       "path": "lib/index.js.map",
-      "bytes": 726389,
-      "sha256": "140ff795d727df22376e263287176d5e5d1e88eadcce5c433c65baaed329947d"
+      "bytes": 1053173,
+      "sha256": "7d84d17e1ccffb3b5a568ddd1307e17e4d3a7f4195d0ac897b0ca34bc7885ed6"
     },
     {
       "path": "lib/install-gateway.mjs",
@@ -138,12 +144,12 @@
     {
       "path": "package-lock.json",
       "bytes": 130948,
-      "sha256": "75e56f9c4d2ed0100e298af4741f30731c9e7c170ba14a11542d64e6e041225f"
+      "sha256": "dfa93488bf5505f8ae5357a735d764c6c010f6d55205b147789d609f62425a4e"
     },
     {
       "path": "package.json",
-      "bytes": 2052,
-      "sha256": "7cd9a9fca99af8b3867acb40daed4f000abeafdd0fa10a2c711eedb838c532cd"
+      "bytes": 2380,
+      "sha256": "402651cbedf5386d6d343d63b89b49e1d12d64317521b57d4d0a9e03f78e6f88"
     },
     {
       "path": "src/ENV_PROMPT.md",
@@ -153,7 +159,7 @@
     {
       "path": "src/backend-contract.ts",
       "bytes": 1631,
-      "sha256": "915491acdf3194a8482d52ef0a708a3438d20af44360685b5a22e418096e1fc6"
+      "sha256": "fff5018c109cea985fe53702c2254006f67bc5274fbab9e98b166b30cb9eb758"
     },
     {
       "path": "src/catalog.ts",
@@ -197,8 +203,8 @@
     },
     {
       "path": "src/world.ts",
-      "bytes": 31456,
-      "sha256": "40c76251a9af3ef6dd1b4ea622cb684f5f0e30e67547f9813b721d65e387fbc3"
+      "bytes": 31731,
+      "sha256": "842a448f05aad7b9d20feb3831377263dd2ad95136376a52b85433ca352c5f1e"
     },
     {
       "path": "styles.css",
@@ -227,8 +233,13 @@
     },
     {
       "path": "tests/ui.test.mjs",
-      "bytes": 13534,
-      "sha256": "e38bfd08d2a543132ac2b7c262e31ccecb03809f27fd67ad49714cbd88dc50cf"
+      "bytes": 20730,
+      "sha256": "85a7ee6639f1fc35eebb7b7cc90090dc06c5691a30629904460ab62818f2c685"
+    },
+    {
+      "path": "tests/webui-language.test.ts",
+      "bytes": 2522,
+      "sha256": "1fe5a95dd53c7cec3ac4df09ecd174ac1f6a6f2fe7e896e1b9223355676beccb"
     },
     {
       "path": "tools/build-vendor.mjs",

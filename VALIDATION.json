@@ -2,7 +2,7 @@
   "schema": 1,
   "package": {
     "name": "cortico-world-task-supervisor",
-    "version": "0.1.0-preview.1",
+    "version": "0.1.0-preview.2",
     "worldApi": 6
   },
   "node": "v24.19.0",
@@ -18,76 +18,151 @@
     "@types/node": "24.19.2",
     "@types/ws": "8.18.2"
   },
-  "dependencyLockSha256": "75e56f9c4d2ed0100e298af4741f30731c9e7c170ba14a11542d64e6e041225f",
-  "sdk": {
-    "npmPackage": "cortico",
-    "version": "0.2.6",
-    "sourceTypesAndRealEventStore": true
-  },
+  "dependencyLockSha256": "dfa93488bf5505f8ae5357a735d764c6c010f6d55205b147789d609f62425a4e",
   "build": {
     "completed": true,
-    "byteExactRebuildVerified": true
+    "byteExactRebuildVerified": true,
+    "allPublicSourceUtf8Lf": true
   },
   "typecheck": {
     "passed": true,
-    "sourceAndFixtureFiles": 81,
-    "reusedFromUnchangedCoreBaseline": true
+    "sourceAndFixtureFiles": 82,
+    "sdkVersions": [
+      "0.2.6",
+      "0.2.3"
+    ],
+    "finalRawLogsRetainedInWorkbench": true
   },
   "tests": {
-    "baselineFullSuite": {
-      "tests": 282,
-      "pass": 281,
+    "fullSuite": {
+      "tests": 298,
+      "pass": 297,
       "fail": 0,
       "cancelled": 0,
       "skipped": 1,
       "todo": 0,
-      "reusedFromPreviousSeal": true,
+      "fullyRerunForPreview2": true,
       "skippedReason": "Windows file symlink permission unavailable; all other fixture cases passed."
     },
-    "currentUiRun": {
-      "tests": 9,
-      "pass": 9,
-      "fail": 0,
-      "cancelled": 0,
-      "skipped": 0,
-      "todo": 0,
-      "newCasesSinceBaseline": 2,
-      "existingCasesRerun": 7
-    },
-    "currentSuiteInventory": {
-      "tests": 284,
-      "fullSuiteRerunAfterUiChange": false,
-      "note": "Only the nine UI cases were rerun after the UI-only revision; core and native suites retain the prior full-run evidence."
-    },
-    "nativeDshPreparedSessionCasesInBaseline": 7,
+    "includedFrontendUiCases": 22,
+    "includedRealWorldStringLanguageMetadataCases": 1,
+    "nativeDshPreparedSessionCases": 7,
     "nativeDshUsesSyntheticInMemoryPersistence": true,
-    "unchangedCoreAndBundles": true
+    "profilesAndHome": "isolated synthetic",
+    "realCredentialsUsed": false
   },
-  "extensionCheck": {
-    "passed": true,
-    "contract": "world-v6",
-    "constructionWithoutStart": true,
-    "selfDescriptionMatchesDescribeJson": true,
-    "tagVocabulary": "skipped-network-timeout",
-    "reusedFromUnchangedCoreBaseline": true
+  "sdkCompatibility": [
+    {
+      "version": "0.2.6",
+      "commit": "ace4c640af07f21c15f81116c370fda0fe828389",
+      "worldApi": 6,
+      "frameworkSourceFilesComparedWithGitObjects": 633,
+      "frameworkArchiveCrlfExportNormalization": [
+        "src/worlds/minecraft/client-window.ps1"
+      ],
+      "extensionCheckPassed": true,
+      "selfDescriptionMatchesDescribeJson": true,
+      "realWorldAssemblyDefaultDisabled": true,
+      "syntheticSecretStorage": true,
+      "persistLiveAndDisk": true,
+      "restartDisabledWorld": true,
+      "webUiSetupInvoke": true,
+      "webUiLanguageArgument": "string",
+      "humanMetadataLanguages": [
+        "zh",
+        "zh-Hant",
+        "en",
+        "ja",
+        "ko",
+        "fr",
+        "de",
+        "es-419",
+        "pt-BR",
+        "it",
+        "ru"
+      ],
+      "dryMountChecksPassed": 5,
+      "dryMountFailures": 0,
+      "startedExternalServices": false
+    },
+    {
+      "version": "0.2.3",
+      "commit": "087289dfcdf262a771c573d16dbaf2392ce6764b",
+      "worldApi": 6,
+      "frameworkSourceFilesComparedWithGitObjects": 624,
+      "frameworkArchiveCrlfExportNormalization": [
+        "src/worlds/minecraft/client-window.ps1"
+      ],
+      "extensionCheckPassed": true,
+      "selfDescriptionMatchesDescribeJson": true,
+      "realWorldAssemblyDefaultDisabled": true,
+      "syntheticSecretStorage": true,
+      "persistLiveAndDisk": true,
+      "restartDisabledWorld": true,
+      "webUiSetupInvoke": true,
+      "webUiLanguageArgument": "string",
+      "humanMetadataLanguages": [
+        "zh",
+        "zh-Hant",
+        "en",
+        "ja",
+        "ko",
+        "fr",
+        "de",
+        "es-419",
+        "pt-BR",
+        "it",
+        "ru"
+      ],
+      "dryMountChecksPassed": 5,
+      "dryMountFailures": 0,
+      "startedExternalServices": false
+    }
+  ],
+  "extensionCheckerEnvironment": {
+    "tagVocabulary": "skipped-intentionally-offline",
+    "liveTagValidationClaimedByThisSeal": false,
+    "tagNote": "SDK check did not fetch the public tag vocabulary. A separate live market check is outside this sealed fixture evidence.",
+    "publishedPackageAndTestToolchain": "fresh npm lock installation without install scripts",
+    "upstreamBuiltinMinecraftCheckerExtras": {
+      "readOnlyExistingPublicNpmModules": true,
+      "reason": "The source SDK checker eagerly imports its unrelated built-in Worlds; Minecraft is not a dependency of this World package.",
+      "packages": {
+        "vec3": "0.2.0",
+        "mineflayer": "4.37.1",
+        "mineflayer-pathfinder": "2.4.5"
+      },
+      "importConditionsPreserved": true,
+      "stubsUsed": false,
+      "fullResolutionLogRetainedInWorkbench": true
+    },
+    "initialHarnessFailure": "The first optional SDK-extra resolver selected vec3 require entry for an import. The corrected harness preserves package export conditions; both final upstream checks exited zero."
   },
   "revision": {
-    "number": 2,
+    "preview": 2,
+    "addedSourceFiles": [
+      "console.d.ts",
+      "tests/webui-language.test.ts"
+    ],
     "changedSourceFiles": [
+      "CHANGELOG.md",
+      "README.md",
       "console.js",
+      "describe.json",
+      "lib/index.js",
+      "lib/index.js.map",
+      "package-lock.json",
+      "package.json",
+      "src/backend-contract.ts",
+      "src/world.ts",
       "tests/ui.test.mjs"
     ],
-    "uiFix": "The native-host requirement and duplicate QQ reply-owner warnings are visible and change with the selected language."
-  },
-  "additionalCompatibility": {
-    "hostFork": "YuZhou Coopanion",
-    "hostCommit": "ff30069d",
-    "corticoCommit": "087289df",
-    "corticoVersion": "0.2.3",
-    "worldApi": 6,
-    "evidence": "Isolated API 6 World assembly and mount verified separately."
+    "removedSourceFiles": [],
+    "vendorSourceUnchangedSincePreview1": true,
+    "changes": "Eleven language frontend and human World metadata; identifiers, model-facing text and task-gate behavior remain stable."
   },
   "scope": {
+    "elevenLanguageCoverage": "Cortico/World control console and its human metadata; standalone DSH installer terminal prompts remain English.",
     "fullElectronStartupClaimed": false,
     "realQqExecutionClaimed": false,
     "longRunningStabilityClaimed": false,
