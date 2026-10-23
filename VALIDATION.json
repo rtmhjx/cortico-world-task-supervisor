@@ -1,0 +1,96 @@
+{
+  "schema": 1,
+  "package": {
+    "name": "cortico-world-task-supervisor",
+    "version": "0.1.0-preview.1",
+    "worldApi": 6
+  },
+  "node": "v24.19.0",
+  "toolchain": {
+    "ws": "8.22.0",
+    "yaml": "2.9.1",
+    "cortico": "0.2.6",
+    "esbuild": "0.28.2",
+    "tsx": "4.23.15",
+    "typescript": "5.9.3",
+    "vitest": "2.1.9",
+    "jsdom": "26.1.0",
+    "@types/node": "24.19.2",
+    "@types/ws": "8.18.2"
+  },
+  "dependencyLockSha256": "75e56f9c4d2ed0100e298af4741f30731c9e7c170ba14a11542d64e6e041225f",
+  "sdk": {
+    "npmPackage": "cortico",
+    "version": "0.2.6",
+    "sourceTypesAndRealEventStore": true
+  },
+  "build": {
+    "completed": true,
+    "byteExactRebuildVerified": true
+  },
+  "typecheck": {
+    "passed": true,
+    "sourceAndFixtureFiles": 81,
+    "reusedFromUnchangedCoreBaseline": true
+  },
+  "tests": {
+    "baselineFullSuite": {
+      "tests": 282,
+      "pass": 281,
+      "fail": 0,
+      "cancelled": 0,
+      "skipped": 1,
+      "todo": 0,
+      "reusedFromPreviousSeal": true,
+      "skippedReason": "Windows file symlink permission unavailable; all other fixture cases passed."
+    },
+    "currentUiRun": {
+      "tests": 9,
+      "pass": 9,
+      "fail": 0,
+      "cancelled": 0,
+      "skipped": 0,
+      "todo": 0,
+      "newCasesSinceBaseline": 2,
+      "existingCasesRerun": 7
+    },
+    "currentSuiteInventory": {
+      "tests": 284,
+      "fullSuiteRerunAfterUiChange": false,
+      "note": "Only the nine UI cases were rerun after the UI-only revision; core and native suites retain the prior full-run evidence."
+    },
+    "nativeDshPreparedSessionCasesInBaseline": 7,
+    "nativeDshUsesSyntheticInMemoryPersistence": true,
+    "unchangedCoreAndBundles": true
+  },
+  "extensionCheck": {
+    "passed": true,
+    "contract": "world-v6",
+    "constructionWithoutStart": true,
+    "selfDescriptionMatchesDescribeJson": true,
+    "tagVocabulary": "skipped-network-timeout",
+    "reusedFromUnchangedCoreBaseline": true
+  },
+  "revision": {
+    "number": 2,
+    "changedSourceFiles": [
+      "console.js",
+      "tests/ui.test.mjs"
+    ],
+    "uiFix": "The native-host requirement and duplicate QQ reply-owner warnings are visible and change with the selected language."
+  },
+  "additionalCompatibility": {
+    "hostFork": "YuZhou Coopanion",
+    "hostCommit": "ff30069d",
+    "corticoCommit": "087289df",
+    "corticoVersion": "0.2.3",
+    "worldApi": 6,
+    "evidence": "Isolated API 6 World assembly and mount verified separately."
+  },
+  "scope": {
+    "fullElectronStartupClaimed": false,
+    "realQqExecutionClaimed": false,
+    "longRunningStabilityClaimed": false,
+    "published": false
+  }
+}
